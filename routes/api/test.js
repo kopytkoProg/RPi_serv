@@ -10,7 +10,7 @@ router.get('/', function (req, res) {
     res.send(
         {
             itIsWorking: true,
-            date: new Date() // OK
+            date: new Date() // OK www
         }
     );
 });
