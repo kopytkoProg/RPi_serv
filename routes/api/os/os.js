@@ -5,9 +5,20 @@ var os = require('os');
 var express = require('express');
 var diskspace = require('diskspace');
 var router = express.Router();
-
-
 var lastCpus = null;
+
+var osInfo = {
+    hostname: os.hostname(),
+    type: os.type(),
+    platform: os.platform(),
+    arch: os.arch(),
+    uptime: os.uptime(),
+    totalmem: os.totalmem(),
+    freemem: os.freemem(),
+    cpus: os.cpus(),
+
+};
+
 var getCurrentCpus = function (newCpus, oldCpus)
 {
     var result = [];
@@ -66,15 +77,17 @@ router.get('/now/cpus', function (req, res)
 
 });
 
+
 router.get('/disk', function (req, res)
 {
     res.writeHead(200, {'Content-Type': 'text/json'});
 
-    diskspace.check('C', function (err, total, free, status)
-    {
-        res.end(JSON.stringify({}), 'utf8');
-    });
+    var disk = osInfo.type == 'Windows_NT' ? 'C' : '/';
 
+    diskspace.check(disk, function (err, total, free, status)
+    {
+        res.end(JSON.stringify({free: free, total: total, disk: disk}), 'utf8');
+    });
 
 
 });

@@ -6,6 +6,9 @@ myModule.controller('osNavbarController', function ($scope, $http)
 
     $scope.cpu = '-';
     $scope.mem = '-';
+    $scope.disk = '-';
+    $scope.diskName = '-';
+
 
     var cpuDataLoade = function ()
     {
@@ -58,7 +61,29 @@ myModule.controller('osNavbarController', function ($scope, $http)
 
 
     };
-    osDataLoade();
+    osDataLoade()
+
+    var diskDataLoade = function ()
+    {
+
+        $http.get('/api/os/disk').
+            success(function (data, status, headers, config)
+            {
+
+                var memPercentage = (data.total - data.free ) / data.total * 100;
+                $scope.disk = memPercentage.toFixed(1);
+                $scope.diskName = data.disk;
+
+                setTimeout(diskDataLoade, 1000 * 60 * 60);
+            }).
+            error(function (data, status, headers, config)
+            {
+                setTimeout(diskDataLoade, 1000 * 60 * 60);
+            });
+
+
+    };
+    diskDataLoade();
 
 
 });

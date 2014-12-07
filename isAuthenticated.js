@@ -13,7 +13,7 @@ var sendUnauthorizedIfUnauthenticated = function (req, res, next)
         return next();
 
     res.status(401);
-    res.end('Not Found', 'utf8');
+    res.end('401 pls login', 'utf8');
 }
 
 module.exports = {
