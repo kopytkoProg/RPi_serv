@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+var debug = require('debug')('RPi_serv');
+var app = require('../app');
+var https = require("https");
+var fs = require("fs");
+var key_file = "ssl/file.pem";
+var cert_file = "ssl/file.crt";
+//var passphrase = "./../ssl/csr.pem";
+
+var config = {
+    key: fs.readFileSync(key_file),
+    cert: fs.readFileSync(cert_file)
+    //passphrase: fs.readFileSync(passphrase)
+};
+
+app.set('port', process.env.PORT || 3000);
+
+//
+//var server = app.listen(app.get('port'), function() {
+//  debug('Express server listening on port ' + server.address().port);
+//});
+
+
+var server = https.createServer(config, app).listen(app.get('port'));
+
+debug('Express server listening on port ' + server.address().port);

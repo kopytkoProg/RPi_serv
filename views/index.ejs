@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <title>RPi</title>
+    <link rel="shortcut icon" href="/Raspberry-Pi.png" type="image/png"/>
+    <script type="text/javascript" src="js/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="angular-1.3.4/angular.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/t/app.js"></script>
+    <script type="text/javascript" src="/t/myController.js"></script>
+    <script type="text/javascript" src="/t/osNavbarController.js"></script>
+
+
+    <script type="text/javascript">
+
+    </script>
+
+    <style type="text/css">
+        th, td {
+            padding: 0px 2px;
+        }
+
+        .navbar-width {
+            width: 60px;
+            display: inline-block
+        }
+
+        .font-small {
+            font-size: 0.7em;
+        }
+    </style>
+</head>
+<body ng-app="myModule">
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href=""><img alt="Brand" src="/Raspberry-Pi.png" style="width: 20px; height: 20px;"></a>
+        </div>
+
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <p class="navbar-text navbar-right"><a href="/login/logout" class="navbar-link">Wyloguj</a></p>
+
+            <div class="navbar-text navbar-right" ng-controller="osNavbarController">
+                <span class="text-muted font-small">MEM:</span>
+                <span class="navbar-width text-left"><b>{{mem}} %</b></span>
+
+                <span class="text-muted font-small">CPU:</span>
+                <span class="navbar-width text-left"><b>{{cpu}} %</b></span>
+            </div>
+        </div>
+
+
+    </div>
+</nav>
+
+
+<h1 class="text-center">My RPi</h1>
+<hr/>
+
+<div class="container" ng-controller="myController">
+
+    <div>
+        <% if  ( anyError ) { %>
+        <div class="alert alert-info" role="alert">
+            <pre><%= massages %></pre>
+        </div>
+        <% } %>
+    </div>
+
+    <div>
+        <h3>Sum</h3>
+
+        <div class="row">
+            <div class="col-xs-2">PCPU:</div>
+            <div class="col-xs-10">{{psSum.PCPU}} %</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">PMEM:</div>
+            <div class="col-xs-10">{{psSum.PMEM}} %</div>
+        </div>
+        <div style="margin-top:20px;"></div>
+    </div>
+    <div>
+        <table class="small col-xs-12">
+            <thead>
+            <tr>
+                <th>USER</th>
+                <th>PID</th>
+                <th>PCPU</th>
+                <th>PMEM</th>
+                <th>VSZ</th>
+                <th>RSS</th>
+                <th>TTY</th>
+                <th>STAT</th>
+                <th>START</th>
+                <th>TIME</th>
+                <!--<th >COMMAND</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="i in ps">
+                <td>{{i.USER}}</td>
+                <td>{{i.PID}}</td>
+                <td>{{i.PCPU}}</td>
+                <td>{{i.PMEM}}</td>
+                <td>{{i.VSZ}}</td>
+                <td>{{i.RSS}}</td>
+                <td>{{i.TTY}}</td>
+                <td>{{i.STAT}}</td>
+                <td>{{i.START}}</td>
+                <td>{{i.TIME}}</td>
+                <!--<td>{{i.COMMAND}}</td>-->
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
