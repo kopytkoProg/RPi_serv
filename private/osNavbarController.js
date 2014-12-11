@@ -16,11 +16,13 @@ myModule.controller('osNavbarController', function ($scope, $http)
         $http.get('/api/os/now/cpus').
             success(function (data, status, headers, config)
             {
+                var cpus = data.cpus;
+
                 console.log('data', data);
                 var cpuPercents = []
-                for (var i = 0; i < data.length; i++)
+                for (var i = 0; i < cpus.length; i++)
                 {
-                    var times = data[i].times;
+                    var times = cpus[i].times;
                     var total = times.irq + times.idle + times.user + times.sys + times.nice;
                     cpuPercents[i] = ((total - times.idle) / total) * 100;
                 }
@@ -30,6 +32,7 @@ myModule.controller('osNavbarController', function ($scope, $http)
                     }, 0) / cpuPercents.length;
 
                 $scope.cpu = cpuPercentsAvg.toFixed(1);
+                $scope.core_temp = data.coreTemp.toFixed(1)
 
                 setTimeout(cpuDataLoade, 5000);
             }).
