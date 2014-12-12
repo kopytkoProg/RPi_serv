@@ -3,7 +3,6 @@
  */
 var myModule = angular.module('myModule', []);
 
-
 myModule.config(function ($httpProvider)
 {
     $httpProvider.interceptors.push(function ()
@@ -17,3 +16,31 @@ myModule.config(function ($httpProvider)
         };
     });
 });
+
+myModule.factory('AppConfig', function ()
+{
+    function APPConfigClass()
+    {
+
+        this.Temp = {
+            RefreshTime: 2000
+        };
+
+        this.Disk = {
+            RefreshTime: 1000 * 60 * 60
+        };
+
+        this.CpuUsage = {
+            RefreshTime: 5000
+        };
+
+        this.Os = {
+            RefreshTime: 5000
+        };
+
+    }
+
+    return  new APPConfigClass();
+});
+
+
