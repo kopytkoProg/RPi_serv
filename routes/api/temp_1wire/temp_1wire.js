@@ -5,6 +5,11 @@ var express = require('express');
 var router = express.Router();
 var list = require('./list');
 var temp = require('./temp');
+var tempHistory = require('./tempHistory');
+
+// ===== Start creating history =====
+tempHistory();
+
 
 router.get('/list', function (req, res)
 {
