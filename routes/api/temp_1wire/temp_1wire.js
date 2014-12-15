@@ -6,12 +6,13 @@ var router = express.Router();
 var list = require('./list');
 var temp = require('./temp');
 var tempHistory = require('./tempHistory');
+var DS18B20 = require('../../../config/DS18B20');
 
 // ===== Start creating history =====
 var tempInstance = new tempHistory();
 
 
-router.get('/list', function (req, res)
+router.get('/list', function (req, res) // list of connected sensors
 {
     res.writeHead(200, {'Content-Type': 'text/json'});
     var obj = {};
@@ -52,5 +53,10 @@ router.get('/history/date/:date', function (req, res)
 
 });
 
+router.get('/sensors/descriptions', function (req, res)
+{
+    res.writeHead(200, {'Content-Type': 'text/json'});
+    res.end(JSON.stringify(DS18B20.Descriptions), 'utf8');
+});
 
 module.exports = router;

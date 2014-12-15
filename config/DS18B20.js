@@ -7,6 +7,7 @@
 
 var DS18B20D = {
 
+
     Descriptions: [
         {
             id: '28-0000058f448c',

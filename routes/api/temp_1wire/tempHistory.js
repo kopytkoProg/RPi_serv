@@ -45,7 +45,7 @@ var tempHistory = function ()
     /**
      * Get daily history for selected date.
      * @param {afterHistoryReadyCallback} callback called when data is ready
-     * @param {Data} date
+     * @param {Date} date
      */
     this.getHistory = function (callback, date)
     {

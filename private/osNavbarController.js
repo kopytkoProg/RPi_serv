@@ -42,11 +42,11 @@ myModule.controller('osNavbarController',
                     $scope.cpu = cpuPercentsAvg.toFixed(1);
                     $scope.core_temp = data.coreTemp.toFixed(1)
 
-                    setTimeout(cpuDataLoade, AppConfig.CpuUsage.RefreshTime);
+                    setTimeout(cpuDataLoade, AppConfig.CpuUsage.Interval);
                 }).
                 error(function (data, status, headers, config)
                 {
-                    setTimeout(cpuDataLoade, AppConfig.CpuUsage.RefreshTime);
+                    setTimeout(cpuDataLoade, AppConfig.CpuUsage.Interval);
                 });
 
 
@@ -63,11 +63,11 @@ myModule.controller('osNavbarController',
                     var memPercentage = (data.totalmem - data.freemem) / data.totalmem * 100;
                     $scope.mem = memPercentage.toFixed(1);
 
-                    setTimeout(osDataLoade, AppConfig.Os.RefreshTime);
+                    setTimeout(osDataLoade, AppConfig.Os.Interval);
                 }).
                 error(function (data, status, headers, config)
                 {
-                    setTimeout(osDataLoade, AppConfig.Os.RefreshTime);
+                    setTimeout(osDataLoade, AppConfig.Os.Interval);
                 });
 
 
@@ -85,11 +85,11 @@ myModule.controller('osNavbarController',
                     $scope.disk = memPercentage.toFixed(1);
                     $scope.diskName = data.disk;
 
-                    setTimeout(diskDataLoade, AppConfig.Disk.RefreshTime);
+                    setTimeout(diskDataLoade, AppConfig.Disk.Interval);
                 }).
                 error(function (data, status, headers, config)
                 {
-                    setTimeout(diskDataLoade, AppConfig.Disk.RefreshTime);
+                    setTimeout(diskDataLoade, AppConfig.Disk.Interval);
                 });
 
 

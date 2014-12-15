@@ -5,7 +5,7 @@ var myModule = angular.module('myModule', []);
 
 myModule.config(function ($httpProvider)
 {
-    $httpProvider.interceptors.push(function ()
+    $httpProvider.interceptors.push(function ($q)
     {
         return {
             responseError: function (rejection)
@@ -23,24 +23,30 @@ myModule.factory('AppConfig', function ()
     {
 
         this.Temp = {
-            RefreshTime: 2000
+            Interval: 2000
         };
 
         this.Disk = {
-            RefreshTime: 1000 * 60 * 60
+            Interval: 1000 * 60 * 60
         };
 
         this.CpuUsage = {
-            RefreshTime: 5000
+            Interval: 5000
         };
 
         this.Os = {
-            RefreshTime: 5000
+            Interval: 5000
+        };
+
+        this.tempHistory = {
+            Interval: 1000 * 60 * 5,
+            StartDelay: 1000 * 2,
+            DelayBeforeAcceptResizing: 500
         };
 
     }
 
-    return  new APPConfigClass();
+    return new APPConfigClass();
 });
 
 
