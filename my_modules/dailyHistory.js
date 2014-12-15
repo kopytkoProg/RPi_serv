@@ -1,5 +1,5 @@
 var historyFsStorage = require('./historyFsStorage');
-
+var fs = require('fs');
 
 /***
  * @class
@@ -20,6 +20,16 @@ var dailyHistory = function (dir)
         toFileName: function (date)
         {
             return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + '.txt';
+        },
+
+        toDate: function (name)
+        {
+            var fileName = name.split('.')[0];
+            fileName = fileName.split('-');
+
+            var d = new Date(parseInt(fileName[2]), parseInt(fileName[1]) - 1, parseInt(fileName[0]));
+
+            return d;
         },
 
         prepareDate: function (date)
@@ -119,7 +129,26 @@ var dailyHistory = function (dir)
         f(A, B);
     };
 
+    /**
+     *
+     * @returns {Array.<NameAndData>}
+     */
+    this.listOfSavedHistory = function ()
+    {
+        var files = fs.readdirSync(dir);
+        return files.reduce(function (acc, e)
+        {
+            acc.push({fileName: e, date: util.toDate(e)});
+            return acc;
+        }, new Array());
+    }
 };
 
 
 module.exports = dailyHistory;
+
+/**
+ * @typedef {object} NameAndData
+ * @property  {string} fileName
+ * @property  {Date} date
+ * */
