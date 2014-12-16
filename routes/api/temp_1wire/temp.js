@@ -13,6 +13,7 @@ var temp = function (callback)
 {
 
     var temps = [];
+    var crcErrors = [];
 
     list(function (l)
     {
@@ -21,7 +22,9 @@ var temp = function (callback)
             exec("cat /sys/bus/w1/devices/" + id + "/w1_slave",
                 function (error, stdout, stderr)
                 {
-                    var temp = 0;
+                    //console.log(id, stdout);
+                    var temp = null;
+                    var crcCorrect = false;
 
                     if (error !== null);
                     else
@@ -29,9 +32,9 @@ var temp = function (callback)
                         var lines = stdout.trim().split(/\r\n|\n|\r/);
 
                         var crcRex = new RegExp(/^.*(YES)$/);
-                        var tempRex = new RegExp(/^.*t=([0-9]*)$/);
+                        var tempRex = new RegExp(/^.*t=(-?[0-9]*)$/);
 
-                        var crcCorrect = crcRex.test(lines[0])
+                        crcCorrect = crcRex.test(lines[0]);
                         var match = tempRex.exec(lines[1]);
 
                         temp = parseFloat(match[1]) / 1000;
@@ -42,15 +45,28 @@ var temp = function (callback)
                      * @type {DS18B20DDescriptionObject}
                      */
                     var descObj = DS18B20.DescriptionFor(id);
-
-                    temps.push({
-                        id: id,
-                        innerId: descObj.innerId,
-                        temp: temp,
-                        date: new Date(),
-                        crcCorrect: crcCorrect,
-                        name: descObj.name
-                    });
+                    if (crcCorrect)
+                    {
+                        temps.push({
+                            id: id,
+                            innerId: descObj.innerId,
+                            temp: temp,
+                            date: new Date(),
+                            crcCorrect: crcCorrect,
+                            name: descObj.name
+                        });
+                    }
+                    else
+                    {
+                        crcErrors.push({
+                            id: id,
+                            innerId: descObj.innerId,
+                            temp: temp,
+                            date: new Date(),
+                            crcCorrect: crcCorrect,
+                            name: descObj.name
+                        });
+                    }
                 });
 
 
@@ -58,15 +74,15 @@ var temp = function (callback)
 
         var f = function ()
         {   // wait until end all measure
-            if (temps.length != l.length) setTimeout(f, 200);
+            if (temps.length + crcErrors.length != l.length) setTimeout(f, 200);
             else callback(temps.sort(function (a, b)
             {
                 return a.id.localeCompare(b.id);
             }));
-        }
+        };
         f();
     });
-}
+};
 
 module.exports = temp;
 

@@ -13,36 +13,56 @@ myModule.controller('tempPlotController',
     function ($scope, $http, $q, AppConfig)
     {
 
-        $http.get('api/temp_1wire/history/list').
-            success(function (data, status, headers, config)
-            {
-                $scope.listsOfHistories = data.reduce(function (acc, e)
-                {
-                    var monthsName = [
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December"
-                    ];
-                    var date = new Date(e.date);
-                    acc.push({
-                        date: date,
-                        fileName: e.fileName,
-                        text: date.getDate() + ' ' + monthsName[date.getMonth()] + ' ' + date.getFullYear()
-                    });
-                    return acc;
-                }, []);
-                $scope.selectedHistory = $scope.listsOfHistories[0];
+        var timeoutHelper = new TimeoutHelper();
 
-            });
+        var createSelectList = function ()
+        {
+            $http.get('api/temp_1wire/history/list').
+                success(function (data, status, headers, config)
+                {
+                    $scope.listsOfHistories = data.reduce(function (acc, e)
+                    {
+                        var monthsName = [
+                            "January",
+                            "February",
+                            "March",
+                            "April",
+                            "May",
+                            "June",
+                            "July",
+                            "August",
+                            "September",
+                            "October",
+                            "November",
+                            "December"
+                        ];
+                        var date = new Date(e.date);
+                        acc.push({
+                            date: date,
+                            fileName: e.fileName,
+                            text: date.getDate() + ' ' + monthsName[date.getMonth()] + ' ' + date.getFullYear()
+                        });
+                        return acc;
+                    }, []);
+
+
+                    $scope.selectedHistory = $scope.listsOfHistories.reduce(function (acc, e)
+                    {
+                        if ($scope.selectedHistory && $scope.selectedHistory.date.getTime() == e.date.getTime())
+                        {
+                            return e;
+                        }
+                        return acc;
+                    }, $scope.listsOfHistories[0]);
+
+
+                });
+            timeoutHelper.setTimeout(createSelectList,
+                typeof AppConfig.tempHistory.ListOfHistoriesRefreshInterval == 'function'
+                    ? AppConfig.tempHistory.ListOfHistoriesRefreshInterval()
+                    : AppConfig.tempHistory.ListOfHistoriesRefreshInterval);
+        };
+        createSelectList();
 
 
         var plot = null;
@@ -81,10 +101,10 @@ myModule.controller('tempPlotController',
             plot = $.plot("#plot", dataForPlot, {
                 xaxis: {
                     mode: "time",
-                    tickSize: [1, 'hour']
+                    tickSize: AppConfig.tempHistory.getHourTickSize()//[2, 'hour']
                 }
             });
-        }
+        };
 
 
         var loadData = function ()
@@ -128,33 +148,51 @@ myModule.controller('tempPlotController',
                 });
             }
         };
-        setTimeout(loadData, AppConfig.tempHistory.StartDelay);
-        setInterval(loadData, AppConfig.tempHistory.Interval);
-        $scope.$watch('selectedHistory', loadData);
+        $scope.loadData = loadData;
+        timeoutHelper.setTimeout(loadData, AppConfig.tempHistory.StartDelay);
+        timeoutHelper.setInterval(loadData, AppConfig.tempHistory.Interval);
+        //$scope.$watch('selectedHistory', loadData);
 
         var onResize = function ()
         {
             if (plot)
             {
+                var opts = plot.getOptions();
+                console.log(opts);
+
+                opts.xaxes[0].tickSize = AppConfig.tempHistory.getHourTickSize();
+
                 plot.resize();
                 plot.setupGrid();
                 plot.draw();
             }
         };
 
-        (function ()
+
+        var onResizeController = new (function ()
         {
             var lastResize = null;
-            $(window).resize(function ()
+            var rawOnResize = function ()
             {
-                if (lastResize != null) clearTimeout(lastResize);
+    if (lastResize != null) clearTimeout(lastResize);
                 lastResize = setTimeout(onResize, AppConfig.tempHistory.DelayBeforeAcceptResizing);
-            });
+            };
+            $(window).resize(rawOnResize);
+
+            this.destroy = function ()
+            {
+                $(window).off("resize", null, rawOnResize);
+            };
         })();
 
 
-    })
-;
+        $scope.$on("$destroy", function (event)
+        {
+            onResizeController.destroy();
+            timeoutHelper.clearAll();
+        });
+    });
+
 
 /**
  *  @typedef {Object} DataAndDescription

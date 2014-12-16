@@ -8,6 +8,7 @@ myModule.controller('myController',
     {
 
         //console.log('', AppConfig);
+        var timeoutHelper = new TimeoutHelper();
 
 
         var loadData = function ()
@@ -17,14 +18,14 @@ myModule.controller('myController',
                 {
                     $scope.temps = data.temp;
                     //$scope.temps.push({id: '28-0000054d6df0', temp: 25.0, date: new Date(), crcCorrect:true});
-                    setTimeout(loadData, AppConfig.Temp.Interval);
+                    timeoutHelper.setTimeout(loadData, AppConfig.Temp.Interval);
                 }).
                 error(function (data, status, headers, config)
                 {
-                    setTimeout(loadData, AppConfig.Temp.Interval);
+                    timeoutHelper.setTimeout(loadData, AppConfig.Temp.Interval);
                 });
         };
         loadData();
-
+        $scope.$on("$destroy", timeoutHelper.clearAll);
 
     });
