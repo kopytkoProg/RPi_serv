@@ -3,9 +3,14 @@ var debug = require('debug')('RPi_serv');
 var app = require('../app');
 var https = require("https");
 var fs = require("fs");
-var key_file = "ssl/file.pem";
-var cert_file = "ssl/file.crt";
+//var key_file = "ssl/file.pem";
+//var cert_file = "ssl/file.crt";
 //var passphrase = "./../ssl/csr.pem";
+var fs = require("fs");
+
+var key_file = "ssl/michal-rpi.dtdns.net/server.key";
+var cert_file = "ssl/michal-rpi.dtdns.net/server.crt";
+
 
 var config = {
     key: fs.readFileSync(key_file),

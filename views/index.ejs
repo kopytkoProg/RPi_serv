@@ -28,6 +28,7 @@
     <script type="text/javascript" src="/t/osNavbarController.js"></script>
     <script type="text/javascript" src="/t/tempPlotController.js"></script>
     <script type="text/javascript" src="/t/linkNavbarController.js"></script>
+    <!--<script type="text/javascript" src="/t/plotDirective.js"></script>-->
 
 
     <script type="text/javascript">
@@ -64,7 +65,9 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href=""><img alt="Brand" src="/Raspberry-Pi.png" style="width: 20px; height: 20px;"></a>
-            <p loading class="navbar-text"><span class="glyphicon glyphicon-refresh text-muted" aria-hidden="true"></span></p>
+
+            <p loading class="navbar-text"><span class="glyphicon glyphicon-refresh text-muted"
+                                                 aria-hidden="true"></span></p>
 
         </div>
 
@@ -76,9 +79,6 @@
                 <li active-link="active"><a href="#/actual-temp.html">Temperature</a></li>
                 <li active-link="active"><a href="#/temp-history.html">Temperatures history</a></li>
             </ul>
-
-
-
 
 
             <ul class="nav navbar-nav navbar-right">
@@ -110,8 +110,8 @@
 
 
 <div class="container">
-    <h1 class="text-center">My RPi</h1>
-    <hr/>
+    <!--<h1 class="text-center">My RPi</h1>-->
+    <!--<hr/>-->
 
     <div>
         <% if  ( anyError ) { %>
@@ -148,14 +148,25 @@
 </script>
 
 <script type="text/ng-template" id="temp-history.html">
-    <div style="position: relative; overflow: hidden">
-        <h3 style="display: inline-block">Temp plot</h3>
 
+    <div style="position: relative; overflow: hidden">
+        <div style=" margin: 20px 0 10px 0">
+            <select class="form-control" style="float: right; width:auto; margin:10px 0px 10px 10px;" ng-model="selectedHistory" ng-options="h.text for h in listsOfHistories"
+                    ng-change="loadData()">
+            </select>
+        </div>
+    </div>
+    <div id="plot" style="width: 100%; height: 400px;"></div>
+
+</script>
+
+<script type="text/ng-template" id="temp-plot.html">
+    <div style="position: relative; overflow: hidden">
         <div style="float: right; margin: 20px 0 10px 0">
             <select class="form-control" ng-model="selectedHistory" ng-options="h.text for h in listsOfHistories"
                     ng-change="loadData()">
             </select>
         </div>
     </div>
-    <div id="plot" style="width: 100%; height: 400px;"></div>
+    <div class="divForPlot" style="width: 100%; height: 400px;"></div>
 </script>

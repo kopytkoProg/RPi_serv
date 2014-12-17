@@ -59,7 +59,7 @@ myModule.factory('AppConfig', function ()
 
         this.tempHistory = {
             Interval: 1000 * 60 * 5,
-            StartDelay: 1000 * 1,
+            StartDelay: 1000 * 0.5,
             DelayBeforeAcceptResizing: 200,
             /***
              * @type {(Number, Function)}
@@ -74,17 +74,25 @@ myModule.factory('AppConfig', function ()
 
                 return msLeftToNextDay;
             },
-            getHourTickSize: function ()
+            getHourTickSize: function (plotElement)
             {
-                if ($('#plot').width() < 800) return [2, 'hour'];
+                if ($(plotElement).width() < 800) return [2, 'hour'];
                 else return [1, 'hour'];
             }
+        };
+        // -----------------------------------------------------------------
+        this.callOrVal = function (v)
+        {
+            return typeof v == 'function' ? v() : v
         };
 
     }
 
+
     return new APPConfigClass();
 });
+
+
 myModule.directive('activeLink', function ($location)
 {
     return {
