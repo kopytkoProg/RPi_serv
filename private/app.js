@@ -16,9 +16,15 @@ myModule.config(function ($routeProvider)
             templateUrl: 'temp-history.html',
             controller: 'tempPlotController'
         }).
+        when('/temp-compare-history.html', {
+            templateUrl: 'temp-compare-history.html',
+            controller: 'tempComparePlotController'
+        }).
         otherwise({
             redirectTo: '/actual-temp.html'
         });
+
+
 });
 
 

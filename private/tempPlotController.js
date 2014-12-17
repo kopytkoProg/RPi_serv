@@ -84,7 +84,7 @@ myModule.controller('tempPlotController',
         {
             var historyArray = data.history;
             var dataForPlot = [];
-
+            var idx = 0;
             for (var sensorHistory in historyArray)
             {
                 dataForPlot.push(
@@ -105,15 +105,41 @@ myModule.controller('tempPlotController',
                                     e.temp
                                 ]);
                             return acc;
-                        }, [])
+                        }, []),
+                        idx: idx++
                     });
             }
+            var togglePlot = function (seriesIdx)
+            {
+                if (plot)
+                {
+                    var someData = plot.getData();
+                    someData[seriesIdx].lines.show = !someData[seriesIdx].lines.show;
+                    someData[seriesIdx].points.show = !someData[seriesIdx].points.show;
+                    plot.setData(someData);
+                    plot.draw();
+                }
+            };
             plot = $.plot("#plot", dataForPlot, {
                 xaxis: {
                     mode: "time",
                     tickSize: AppConfig.tempHistory.getHourTickSize()//[2, 'hour']
+                },
+                legend: {
+                    labelFormatter: function (label, series)
+                    {
+                        return '<span style="cursor:pointer;" class="myLegend" series="' + series.idx + '">' + label + '</span>';
+                    }
                 }
             });
+
+            $('.myLegend').on('click', function ()
+            {
+                togglePlot($(this).attr('series'));
+                $(this).toggleClass('text-muted');
+            });
+
+
         };
 
 

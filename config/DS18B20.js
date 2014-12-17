@@ -40,7 +40,13 @@ var DS18B20D = {
             return e.id == id;
         });
 
-        return selected.length == 1 ? selected[0] : null;
+        return selected.length == 1 ? selected[0] : {
+            id: id,
+            //===========================================================================
+            innerId: 'Unknown',
+            name: 'Unknown',
+            description: 'Unknown'
+        };
     }
 
 
