@@ -110,10 +110,12 @@ myModule.controller('tempPlotController',
                         idx: idx++
                     });
             }
+
             var togglePlot = function (seriesIdx)
             {
                 if (plot)
                 {
+
                     var someData = plot.getData();
                     someData[seriesIdx].lines.show = !someData[seriesIdx].lines.show;
                     someData[seriesIdx].points.show = !someData[seriesIdx].points.show;
@@ -195,11 +197,12 @@ myModule.controller('tempPlotController',
         $scope.loadData = loadData;
         timeoutHelper.setInterval(loadData, AppConfig.tempHistory.Interval);
         //$scope.$watch('selectedHistory', loadData);
-
+        AppConfig.tempHistory.setHeightByWidth('#plot');
         var onResize = function ()
         {
             if (plot)
             {
+                AppConfig.tempHistory.setHeightByWidth('#plot');
                 var opts = plot.getOptions();
                 console.log(opts);
 
