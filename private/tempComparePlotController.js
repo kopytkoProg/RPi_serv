@@ -93,6 +93,8 @@ myModule.controller('tempComparePlotController',
             var getDataADefer = $q.defer();
             var getDataBDefer = $q.defer();
             var getDescriptionsDefer = $q.defer();
+            //var selectedDateA = $scope.SelectedA.date;
+            //var selectedDateB = $scope.SelectedB.date;
 
             $http.get('/api/temp_1wire/history/date/' + $scope.SelectedA.date).
                 success(function (data, status, headers, config)
@@ -174,6 +176,7 @@ myModule.controller('tempComparePlotController',
                             data: historyArray[sensorHistory].reduce(function (acc, e)
                             {
                                 var d = new Date(e.date);
+                                d.setFullYear(1970,0,1);
                                 acc.push(
                                     [
                                         d.getTime() + (-d.getTimezoneOffset() * 60 * 1000),
@@ -191,8 +194,6 @@ myModule.controller('tempComparePlotController',
             {
                 prepareData(histories[i].history, histories[i].labelPrefix)
             }
-            //;
-            //if (histories[1]) prepareData(histories[1].history, histories[1].labelPrefix);
 
             var togglePlot = function (seriesIdx)
             {
@@ -206,10 +207,18 @@ myModule.controller('tempComparePlotController',
                 }
             };
 
+
+            var xMin = new Date(0);
+            var xMax = new Date(xMin.getTime());
+            xMax.setDate(xMax.getDate() + 1);
+
+
             plot = $.plot("#plot", dataForPlot, {
                 xaxis: {
                     mode: "time",
-                    tickSize: AppConfig.tempHistory.getHourTickSize()//[2, 'hour']
+                    tickSize: AppConfig.tempHistory.getHourTickSize("#plot"),
+                    min: xMin.getTime(),
+                    max: xMax.getTime()
                 },
                 legend: {
                     labelFormatter: function (label, series)
@@ -228,15 +237,17 @@ myModule.controller('tempComparePlotController',
 
 
         //
-        //
+        AppConfig.tempHistory.setHeightByWidth('#plot');
         var onResize = function ()
         {
             if (plot)
             {
-                var opts = plot.getOptions();
-                console.log(opts);
+                AppConfig.tempHistory.setHeightByWidth('#plot');
 
-                opts.xaxes[0].tickSize = AppConfig.tempHistory.getHourTickSize();
+                var opts = plot.getOptions();
+
+
+                opts.xaxes[0].tickSize = AppConfig.tempHistory.getHourTickSize("#plot");
 
                 plot.resize();
                 plot.setupGrid();
@@ -274,6 +285,6 @@ myModule.controller('tempComparePlotController',
 
 /**
  *  @typedef {Object} DataAndDescription
- *  @property {Array.<{temp:Number, date:string}>} history temp history data
+ *  @property {Array.<{labelPrefix:string, history:{temp:Number, date:string}}>} histories temp history data
  *  @property {Array.<DS18B20DDescriptionObject>} descriptions sensors descriptions
  */

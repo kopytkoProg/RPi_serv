@@ -165,19 +165,42 @@
 
 <script type="text/ng-template" id="temp-compare-history.html">
 
+
     <div style="position: relative; overflow: hidden">
-        <div style=" margin: 20px 0 10px 0">
-            <select class="form-control" style="float: right; width:auto; margin:10px 0px 10px 10px;"
-                    ng-model="SelectedB" ng-options="h.text for h in ListB"
-                    ng-change="loadData()">
-            </select>
-            <select class="form-control" style="float: right; width:auto; margin:10px 0px 10px 10px;"
-                    ng-model="SelectedA" ng-options="h.text for h in ListA"
-                    ng-change="loadData()">
-            </select>
+        <div class="row">
+
+            <form class="form-horizontal" role="form">
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label" style="font-size: 1.0em"><strong>A</strong></label>
+
+                        <div class="col-sm-11">
+                            <select class="form-control" ng-model="SelectedA" ng-options="h.text for h in ListA"
+                                    ng-change="loadData()">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label" style="font-size: 1.0em"><strong>B</strong></label>
+
+                        <div class="col-sm-11">
+                            <select class="form-control col-xs-6" ng-model="SelectedB"
+                                    ng-options="h.text for h in ListB"
+                                    ng-change="loadData()">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
+        <hr />
+        <div id="plot" style="width: 100%; height: 400px; "></div>
     </div>
 
-    <div id="plot" style="width: 100%; height: 400px;"></div>
+
 
 </script>

@@ -82,9 +82,17 @@ myModule.factory('AppConfig', function ()
             },
             getHourTickSize: function (plotElement)
             {
-                if ($(plotElement).width() < 800) return [2, 'hour'];
+                var width = $(plotElement).width();
+                if (width < 800) return [4, 'hour'];
+                else if (width < 800) return [2, 'hour'];
                 else return [1, 'hour'];
+            },
+            setHeightByWidth: function(plotElement){
+                var width = $(plotElement).width();
+                if(width > 1000) $(plotElement).height(600);
+                else $(plotElement).height(400);
             }
+
         };
         // -----------------------------------------------------------------
         this.callOrVal = function (v)

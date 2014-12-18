@@ -19,6 +19,13 @@ var DS18B20D = {
         {
             id: '28-0000058f8de4',
             //===========================================================================
+            innerId: 'firstFlorOutside1',
+            name: 'Na dworze',
+            description: 'Czujnik temperatury umieszczony na dworze (1 pietro, Południowa strona)'
+        },
+        {
+            id: 'unassigned',
+            //===========================================================================
             innerId: 'michalsRoomFree1',
             name: 'Na fotelu',
             description: 'Czujnik temperatury umieszczony na fotelu'

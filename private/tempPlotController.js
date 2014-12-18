@@ -99,6 +99,7 @@ myModule.controller('tempPlotController',
                         data: historyArray[sensorHistory].reduce(function (acc, e)
                         {
                             var d = new Date(e.date);
+                            d.setFullYear(1970,0,1);
                             acc.push(
                                 [
                                     d.getTime() + (-d.getTimezoneOffset() * 60 * 1000),
@@ -120,10 +121,17 @@ myModule.controller('tempPlotController',
                     plot.draw();
                 }
             };
+
+            var xMin = new Date(0);
+            var xMax = new Date(xMin.getTime());
+            xMax.setDate(xMax.getDate() + 1);
+
             plot = $.plot("#plot", dataForPlot, {
                 xaxis: {
                     mode: "time",
-                    tickSize: AppConfig.tempHistory.getHourTickSize()//[2, 'hour']
+                    tickSize: AppConfig.tempHistory.getHourTickSize("#plot"),//[2, 'hour']
+                    min: xMin.getTime(),
+                    max: xMax.getTime()
                 },
                 legend: {
                     labelFormatter: function (label, series)
@@ -195,7 +203,7 @@ myModule.controller('tempPlotController',
                 var opts = plot.getOptions();
                 console.log(opts);
 
-                opts.xaxes[0].tickSize = AppConfig.tempHistory.getHourTickSize();
+                opts.xaxes[0].tickSize = AppConfig.tempHistory.getHourTickSize("#plot");
 
                 plot.resize();
                 plot.setupGrid();
