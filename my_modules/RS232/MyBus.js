@@ -2,6 +2,8 @@ var serialPort = require("serialport");
 var SerialPort = serialPort.SerialPort;
 
 
+var timeoutTime = 100; //ms
+
 var MSG_ADDRESS = 0;
 var MSG_COMMAND = 1;
 var MSG_DATA_LENGTH = 2;
@@ -20,21 +22,17 @@ var crc = function (data)
 
 //===============================================================
 
-/**
- * @param {Number} address
- * @param {Number} command
- * @param {Array.<Number>}data
- */
-var Msg = function (address, command, data)
+var MsgClass = function (address, command, data)
 {
+
     this.address = address;
     this.command = command;
-    this.data = data;
+    this.data = data || [];
 
     this.toArray = function ()
     {
         var rawHeader = [this.address, this.command, this.data.length];
-        var rawMsg = rawHeader.concat(data);
+        var rawMsg = rawHeader.concat(this.data);
 
         return rawMsg;
     };
@@ -54,7 +52,13 @@ var Msg = function (address, command, data)
 
 //===============================================================
 
-var MyBus = function (onOpen, onRead)
+/**
+ * @class MyBusClass
+ * @param onOpen
+ * @param onRead
+ * @constructor
+ */
+var MyBusClass = function (onOpen, onRead)
 {
     /**
      * @param {RS232OnListReady} callback
@@ -72,7 +76,7 @@ var MyBus = function (onOpen, onRead)
     var parseMsg = function (arr)
     {
         var arrayCp = arr.slice(0, arr.length);
-        return new Msg(arr[MSG_ADDRESS], arr[MSG_COMMAND], arr.slice(3, arr[MSG_DATA_LENGTH] + 3));
+        return new MsgClass(arr[MSG_ADDRESS], arr[MSG_COMMAND], arr.slice(3, arr[MSG_DATA_LENGTH] + 3));
     };
 
 
@@ -84,7 +88,7 @@ var MyBus = function (onOpen, onRead)
 
     var myBuffer = [];
     var lastTimeout = 0;
-    var timeoutTime = 50; //ms
+
     var port = new SerialPort("COM3", {
         baudrate: 9600,
         parser: function (emitter, buffer)
@@ -127,35 +131,37 @@ var MyBus = function (onOpen, onRead)
     });
 
     /**
-     * @param {Msg} msg
-     * @param [unWrite]
+     * @param {MsgClass} msg
+     * @param [onWrite]
      */
-    this.write = function (msg, unWrite)
+    this.write = function (msg, onWrite)
     {
+        //console.log(msg);
         //console.log(msg.get());
-        port.write(msg.get(), unWrite);
+        port.write(msg.get(), onWrite);
     };
 
 };
 
-var p = new MyBus(function ()
-{
-    console.log('OPEN');
-    setInterval(function(){p.write(new Msg(10, 3, [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]));}, 500)
+//var p = new MyBusClass(function ()
+//{
+//    console.log('OPEN');
+//    setInterval(function(){p.write(new MsgClass(10, 3));}, 500)
+//
+//}, function (data)
+//{
+//    console.log(data);
+//});
 
-}, function (data)
-{
-    console.log(data);
-});
-
-
+/**
+ *
+ * @type {{MyBusClass: Function, MsgClass: Function}}
+ */
 module.exports =
 {
-    MyBus: MyBus,
-    Msg: Msg
+    MyBusClass: MyBusClass,
+    MsgClass: MsgClass
 };
-
-
 
 
 /**
