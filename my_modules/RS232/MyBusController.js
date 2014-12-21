@@ -2,8 +2,10 @@
  * Created by michal on 2014-12-20.
  */
 var MyBusClass = require('./MyBus').MyBusClass;
-var MsgClass = require('./MyBus').MsgClass;
-var Devices = require('./Devices');
+var MsgClass = require('./MsgClass');
+
+
+
 Array.prototype.first = function ()
 {
     return this[0]
@@ -19,14 +21,20 @@ var ToSend = [];
 var TTL = 4;
 var Interval = 100;
 
+/**
+ *
+ * @param {onReConnectionOpen} [callback]
+ * @constructor
+ */
 var MyBusController = function (callback)
 {
     /**
      * @type {MyBusClass}
      */
     var myBus = null;
-
+    var _this = this;
     var lastInterval;
+    var connectionOpened = false;
 
     var restartInterval = function ()
     {
@@ -57,8 +65,9 @@ var MyBusController = function (callback)
 
     var onConnectionOpen = function ()
     {
+        connectionOpened = true;
         lastInterval = setInterval(tick, Interval);
-        callback();
+        if (callback) callback(_this);
     };
 
     /**
@@ -66,31 +75,38 @@ var MyBusController = function (callback)
      */
     var onMessageCome = function (msg)
     {
+
         if (TTL - ToSend.first().ttl)
         {
-            ToSend.shift().callback(ToReceive.shift());
+            ToSend.shift().callback(msg);
             restartInterval();                                  // <<------
         }
     };
 
     myBus = new MyBusClass(onConnectionOpen, onMessageCome);
 
+    /**
+     *
+     * @param msg
+     * @param {onResponse} callback
+     */
     this.send = function (msg, callback)
     {
         ToSend.push({msg: msg, callback: callback, ttl: TTL});
-        if (emptyTick) restartInterval();
+        if (connectionOpened && emptyTick) restartInterval();
     }
 
 };
 
 
-var c = new MyBusController(function f()
-{
+module.exports = MyBusController;
 
-        c.send(new MsgClass(Devices.D10.Address, Devices.D10.AvailableCommands.CMD_TOGGLE_LED0), function (m)
-        {
-            f();
-        })
-});
+/**
+ * @callback onResponse
+ * @param {MsgClass} msg
+ */
 
-
+/**
+ * @callback onReConnectionOpen
+ * @param {MyBusController} myBusController contain this MyBusController
+ */

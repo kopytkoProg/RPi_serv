@@ -1,6 +1,7 @@
 var serialPort = require("serialport");
+var MsgClass = require("./MsgClass");
 var SerialPort = serialPort.SerialPort;
-
+var MyBusConfig = require('./../../config/MyBusConfig');
 
 var timeoutTime = 100; //ms
 
@@ -8,47 +9,11 @@ var MSG_ADDRESS = 0;
 var MSG_COMMAND = 1;
 var MSG_DATA_LENGTH = 2;
 
-var MY_ADDRESS = 1;
+var MY_ADDRESS = MyBusConfig.MY_ADDRESS;
 
 
-var crc = function (data)
-{
-    return data.reduce(function (acc, e)
-    {
-        acc += e;
-        return acc & 255;
-    }, 0);
-};
 
 //===============================================================
-
-var MsgClass = function (address, command, data)
-{
-
-    this.address = address;
-    this.command = command;
-    this.data = data || [];
-
-    this.toArray = function ()
-    {
-        var rawHeader = [this.address, this.command, this.data.length];
-        var rawMsg = rawHeader.concat(this.data);
-
-        return rawMsg;
-    };
-
-    this.get = function ()
-    {
-        var rawMsg = this.toArray();
-        rawMsg.push(crc(rawMsg));
-        return rawMsg;
-    };
-
-    this.getCrc = function ()
-    {
-        return crc(this.toArray());
-    }
-};
 
 //===============================================================
 
@@ -94,6 +59,7 @@ var MyBusClass = function (onOpen, onRead)
         parser: function (emitter, buffer)
         {
 
+            //console.log('RAW', buffer);
             for (var i = 0; i < buffer.length; i++)
                 myBuffer.push(buffer[i]);
 
@@ -116,6 +82,8 @@ var MyBusClass = function (onOpen, onRead)
                 if (msg.getCrc() == myBuffer[myBuffer[MSG_DATA_LENGTH] + 3] && msg.address == MY_ADDRESS)
                 {
                     emitter.emit('data', msg);
+                }else{
+                    console.log('CRC Error');
                 }
 
                 myBuffer = [];
@@ -159,8 +127,7 @@ var MyBusClass = function (onOpen, onRead)
  */
 module.exports =
 {
-    MyBusClass: MyBusClass,
-    MsgClass: MsgClass
+    MyBusClass: MyBusClass
 };
 
 

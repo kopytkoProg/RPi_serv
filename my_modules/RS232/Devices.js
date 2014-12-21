@@ -1,19 +1,25 @@
+var FirstDevice = require('./DevicesClass/FirstDevice');
+var Device = require('./DevicesClass/Device');
+var MyBusController = require('./MyBusController');
 /**
  * Created by michal on 2014-12-20.
  */
 
+// Start MyBus
+Device.MyBusController = new MyBusController();
 
+
+/**
+ *
+ * @type {{D10: {Description: string, Instance: FirstDevice}}}
+ */
 var Devices = {
     D10: {
-        Address: 10,
         Description: 'First created device.',
-        AvailableCommands: {
-            CMD_ENABLE_LED0: 1,
-            CMD_DISABLE_LED0: 2,
-            CMD_TOGGLE_LED0: 3
-        }
+        Instance: new FirstDevice(10)
     }
 };
+
 
 
 module.exports = Devices;
