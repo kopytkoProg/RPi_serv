@@ -3,7 +3,7 @@ var MsgClass = require("./MsgClass");
 var SerialPort = serialPort.SerialPort;
 var MyBusConfig = require('./../../config/MyBusConfig');
 
-var timeoutTime = 100; //ms
+var timeoutTime = MyBusConfig.RECEIVING_TIMEOUT; //ms
 
 var MSG_ADDRESS = 0;
 var MSG_COMMAND = 1;
@@ -54,8 +54,11 @@ var MyBusClass = function (onOpen, onRead)
     var myBuffer = [];
     var lastTimeout = 0;
 
-    var port = new SerialPort("COM3", {
+    var port = new SerialPort(MyBusConfig.SERIAL_DEVICE, {
         baudrate: 9600,
+        databits: 8,
+        stopbits: 1,
+        parity: 'none',
         parser: function (emitter, buffer)
         {
 
@@ -70,7 +73,6 @@ var MyBusClass = function (onOpen, onRead)
             }
             else if (myBuffer[MSG_DATA_LENGTH] > myBuffer.length - 4)
             {
-
                 clearTimeout(lastTimeout);
                 lastTimeout = setTimeout(timeOut, timeoutTime);
             }
@@ -83,7 +85,7 @@ var MyBusClass = function (onOpen, onRead)
                 {
                     emitter.emit('data', msg);
                 }else{
-                    console.log('CRC Error');
+                    console.log('CRC Error', myBuffer);
                 }
 
                 myBuffer = [];

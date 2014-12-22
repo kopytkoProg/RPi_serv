@@ -2,11 +2,29 @@ var dev = require('./Devices');
 
 
 
+dev.D10.Instance.CmdSetPortB(1, function ()
+{
+
+
+
+});
+
+
 var f = function ()
 {
-    dev.D10.Instance.CmdSetPortB(255, function ()
+
+    //var t1 = new Date().getTime();
+    dev.D10.Instance.CmdSetPortB(1, function ()
     {
-        dev.D10.Instance.CmdSetPortB(0, function (){f()});
+        //console.log(new Date().getTime() - t1);
+        dev.D10.Instance.CmdSetPortB(2, function ()
+        {
+
+            f()
+
+        });
     });
+
 };
 f();
+

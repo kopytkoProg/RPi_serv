@@ -3,7 +3,7 @@
  */
 var MyBusClass = require('./MyBus').MyBusClass;
 var MsgClass = require('./MsgClass');
-
+var MyBusConfig = require('./../../config/MyBusConfig');
 
 
 Array.prototype.first = function ()
@@ -19,7 +19,7 @@ var ToReceive = [];
  */
 var ToSend = [];
 var TTL = 4;
-var Interval = 100;
+var Interval = MyBusConfig.RETRANSMISSION_TIMEOUT;
 
 /**
  *
@@ -52,6 +52,7 @@ var MyBusController = function (callback)
             if (--ToSend.first().ttl)
             {
                 myBus.write(ToSend.first().msg);
+                if(TTL-1 > ToSend.first().ttl) console.log('RETRANSMIT!!');
             }
             else
             {
