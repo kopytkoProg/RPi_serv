@@ -20,6 +20,10 @@ myModule.config(function ($routeProvider)
             templateUrl: 'temp-compare-history.html',
             controller: 'tempComparePlotController'
         }).
+        when('/led.html', {
+            templateUrl: 'led.html',
+            controller: 'ledController'
+        }).
         otherwise({
             redirectTo: '/actual-temp.html'
         });
@@ -44,8 +48,18 @@ myModule.config(function ($httpProvider)
 
 myModule.factory('AppConfig', function ()
 {
+    /**
+     *
+     * @constructor APPConfigClass
+     */
     function APPConfigClass()
     {
+
+        this.devices = {
+            Led: {
+                Interval: 5000
+            }
+        };
 
         this.Temp = {
             Interval: 2000
@@ -87,9 +101,10 @@ myModule.factory('AppConfig', function ()
                 else if (width < 800) return [2, 'hour'];
                 else return [1, 'hour'];
             },
-            setHeightByWidth: function(plotElement){
+            setHeightByWidth: function (plotElement)
+            {
                 var width = $(plotElement).width();
-                if(width > 1000) $(plotElement).height(600);
+                if (width > 1000) $(plotElement).height(600);
                 else $(plotElement).height(400);
             }
 

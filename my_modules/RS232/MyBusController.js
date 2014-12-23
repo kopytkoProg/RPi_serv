@@ -36,38 +36,53 @@ var MyBusController = function (callback)
     var lastInterval;
     var connectionOpened = false;
 
-    var restartInterval = function ()
+
+    var waitingForResponse = false;
+    var lastTimeout = null;
+
+    var startWaitingForResponse = function ()
     {
-        tick();
-        clearInterval(lastInterval);
-        lastInterval = setInterval(tick, Interval);
+        waitingForResponse = true;
+        if (lastTimeout) clearTimeout(lastTimeout);
+        lastTimeout = setTimeout(tick, Interval);
     };
 
-    var emptyTick = false;
+    var stopWaitingForResponse = function ()
+    {
+        if (lastTimeout) clearTimeout(lastTimeout);
+        waitingForResponse = false;
+    };
+
     var tick = function ()
     {
-        emptyTick = false;
+
+
         if (ToSend.length)
         {
+
             if (--ToSend.first().ttl)
             {
                 myBus.write(ToSend.first().msg);
-                if(TTL-1 > ToSend.first().ttl) console.log('RETRANSMIT!!');
+                startWaitingForResponse();
+
+                if (TTL - 1 > ToSend.first().ttl) console.log('RETRANSMIT !!');
             }
             else
             {
-                restartInterval();
+                stopWaitingForResponse();
+                //restartInterval();
                 console.log('Fail to send', ToSend[0].msg);
                 ToSend.shift().callback(null);
             }
         }
-        else emptyTick = true;
+        //else emptyTick = true;                  // it can provide errors because sometimes no interval between requests
     };
 
     var onConnectionOpen = function ()
     {
         connectionOpened = true;
-        lastInterval = setInterval(tick, Interval);
+        //lastInterval = setInterval(tick, Interval);
+        tick();
         if (callback) callback(_this);
     };
 
@@ -77,11 +92,11 @@ var MyBusController = function (callback)
     var onMessageCome = function (msg)
     {
 
-        if (TTL - ToSend.first().ttl)
-        {
-            ToSend.shift().callback(msg);
-            restartInterval();                                  // <<------
-        }
+
+        ToSend.shift().callback(msg);
+        stopWaitingForResponse();
+        tick();
+
     };
 
     myBus = new MyBusClass(onConnectionOpen, onMessageCome);
@@ -94,7 +109,7 @@ var MyBusController = function (callback)
     this.send = function (msg, callback)
     {
         ToSend.push({msg: msg, callback: callback, ttl: TTL});
-        if (connectionOpened && emptyTick) restartInterval();
+        if (connectionOpened && !waitingForResponse) tick();
     }
 
 };

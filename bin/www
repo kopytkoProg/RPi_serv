@@ -8,8 +8,12 @@ var fs = require("fs");
 //var passphrase = "./../ssl/csr.pem";
 var fs = require("fs");
 
-var key_file = "ssl/michal-rpi.dtdns.net/server.key";
-var cert_file = "ssl/michal-rpi.dtdns.net/server.crt";
+//var key_file = "ssl/michal-rpi.dtdns.net/server.key";
+//var cert_file = "ssl/michal-rpi.dtdns.net/server.crt";
+
+var key_file = "ssl/localhost/localhost.key";
+var cert_file = "ssl/localhost/localhost.crt";
+
 
 
 var config = {

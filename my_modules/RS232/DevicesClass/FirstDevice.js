@@ -12,8 +12,22 @@ var MsgClass = require('./../MsgClass');
  */
 var FirstDevice = function (address)
 {
+    /**
+     * Device description
+     * @type {{ClassInfo: string, InstanceInfo: null, Id: null}}
+     */
+
+    this.info = {
+        ClassInfo: 'It is a Class to control two leds',
+        InstanceInfo: null,
+        Id: null,
+        Address: address,
+        InstanceOf: 'FirstDevice'
+    };
+
     var _this = this;
     this.__proto__ = Device;
+
     this.Address = address;
     this.AvailableCommands = {
         CMD_ENABLE_LED0: 1,
@@ -33,7 +47,7 @@ var FirstDevice = function (address)
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_TOGGLE_LED0);
         this.MyBusController.send(msg, function (msg)
         {
-           if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_TOGGLE_LED0);
+            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_TOGGLE_LED0);
         });
 
     };
@@ -47,7 +61,7 @@ var FirstDevice = function (address)
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_GET_PORTB);
         this.MyBusController.send(msg, function (msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_GET_PORTB, msg.data[0]);
+            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_GET_PORTB, msg ? msg.data[0] : null);
         });
 
     };
@@ -55,7 +69,7 @@ var FirstDevice = function (address)
     /**
      * @param {onCommandExecuted_CMD_SET_PORTB} [callback]
      */
-    this.CmdSetPortB = function (value ,callback)
+    this.CmdSetPortB = function (value, callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_SET_PORTB, [value]);
         this.MyBusController.send(msg, function (msg)

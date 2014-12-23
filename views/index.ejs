@@ -7,21 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <link rel="shortcut icon" href="/Raspberry-Pi.png" type="image/png"/>
-    <script type="text/javascript" src="js/jquery-2.1.1.js"></script>
-    <script type="text/javascript" src="js/flot-0.8.3/flot/jquery.flot.js"></script>
-    <script type="text/javascript" src="js/flot-0.8.3/flot/jquery.flot.time.js"></script>
+    <script type="text/javascript" src="/js/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="/js/flot-0.8.3/flot/jquery.flot.js"></script>
+    <script type="text/javascript" src="/js/flot-0.8.3/flot/jquery.flot.time.js"></script>
 
-    <script type="text/javascript" src="angular-1.3.4/angular.js"></script>
-    <script type="text/javascript" src="angular-1.3.4/angular-route.js"></script>
+    <script type="text/javascript" src="/angular-1.3.4/angular.js"></script>
+    <script type="text/javascript" src="/angular-1.3.4/angular-route.js"></script>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- http://fortawesome.github.io -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <!--http://sciactive.com/pnotify/#demos-simple-->
+    <script type="text/javascript" src="/js/notify.min.js"></script>
+
 
     <!-- Optional theme -->
 
     <!--<link rel="stylesheet" href="css/bootstrap-theme.min.css">-->
-    <link rel="stylesheet" href="css/bootstrap-theme-yeti.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme-yeti.min.css">
     <!-- Latest compiled and minified JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="/t/app.js"></script>
     <script type="text/javascript" src="/t/myController.js"></script>
@@ -29,11 +35,37 @@
     <script type="text/javascript" src="/t/tempPlotController.js"></script>
     <script type="text/javascript" src="/t/linkNavbarController.js"></script>
     <script type="text/javascript" src="/t/tempComparePlotController.js"></script>
+    <script type="text/javascript" src="/t/ledController.js"></script>
+
     <!--<script type="text/javascript" src="/t/plotDirective.js"></script>-->
 
 
     <script type="text/javascript">
 
+
+        $.notify.addStyle('happyblue', {
+            html: "<div>☺<span data-notify-text/>☺</div>",
+            classes: {
+                base: {
+                    "white-space": "nowrap",
+                    "background-color": "lightblue",
+                    "padding": "5px"
+                },
+                superblue: {
+                    "color": "white",
+                    "background-color": "blue"
+                },
+                error: {
+                    "color": "red",
+                    "background-color": "red"
+                }
+
+
+
+            }
+        });
+
+        $.notify.defaults({position: "bottom right"});
     </script>
 
     <style type="text/css">
@@ -48,6 +80,10 @@
 
         .font-small {
             font-size: 0.7em;
+        }
+
+        .lightOn {
+            color: #cccc00;
         }
 
     </style>
@@ -80,6 +116,7 @@
                 <li active-link="active"><a href="#/actual-temp.html">Temperature</a></li>
                 <li active-link="active"><a href="#/temp-history.html">Temperatures history</a></li>
                 <li active-link="active"><a href="#/temp-compare-history.html">Compare temperature history</a></li>
+                <li active-link="active"><a href="#/led.html">Led</a></li>
             </ul>
 
 
@@ -131,6 +168,29 @@
 
 </body>
 </html>
+
+<script type="text/ng-template" id="led.html">
+    <h3>LED <i class="fa fa-refresh fa-spin" ng-show="InProgress"></i></h3>
+
+    <div>
+
+
+        <button style="font-size: 2em" class="btn btn-default" ng-click="Leds.LED0=!Leds.LED0; sendNewLedStatus()">
+            <span>LED 0</span>
+            <i style="font-size: 2em; vertical-align: middle;" class="fa fa-lightbulb-o"
+               ng-class="{lightOn: Leds.LED0}"></i>
+        </button>
+
+        <button style="font-size: 2em" class="btn btn-default" ng-click="Leds.LED1=!Leds.LED1; sendNewLedStatus()">
+            <span>LED 1</span>
+            <i style="font-size: 2em; vertical-align: middle;" class="fa fa-lightbulb-o"
+               ng-class="{lightOn: Leds.LED1}"></i>
+        </button>
+
+
+    </div>
+
+</script>
 
 
 <script type="text/ng-template" id="actual-temp.html">
@@ -197,10 +257,9 @@
 
             </form>
         </div>
-        <hr />
+        <hr/>
         <div id="plot" style="width: 100%; height: 400px; "></div>
     </div>
-
 
 
 </script>

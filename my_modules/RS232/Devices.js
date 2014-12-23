@@ -11,15 +11,17 @@ Device.MyBusController = new MyBusController();
 
 /**
  *
- * @type {{D10: {Description: string, Instance: FirstDevice}}}
+ * @type {{D10:FirstDevice}}
  */
 var Devices = {
-    D10: {
-        Description: 'First created device.',
-        Instance: new FirstDevice(10)
-    }
+    D10: function ()
+    {
+        var instance = new FirstDevice(10);
+        instance.info.InstanceInfo = 'First created device.';
+        instance.info.Id = 'D10';
+        return instance;
+    }()
 };
-
 
 
 module.exports = Devices;

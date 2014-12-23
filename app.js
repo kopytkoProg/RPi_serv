@@ -76,6 +76,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/login', require('./routes/login'));
 
 
+app.use('/api/devices', /*isAuthenticated.sendUnauthorizedIfUnauthenticated,*/ require('./routes/api/devices/devices'));
 app.use('/api/temp_1wire', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/temp_1wire/temp_1wire'));
 app.use('/api/test', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/test'));
 app.use('/api/ps', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/ps/ps'));
