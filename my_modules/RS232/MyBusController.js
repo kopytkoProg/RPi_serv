@@ -62,8 +62,13 @@ var MyBusController = function (callback)
 
             if (--ToSend.first().ttl)
             {
-                myBus.write(ToSend.first().msg);
-                startWaitingForResponse();
+
+                waitingForResponse = true;
+
+                myBus.write(ToSend.first().msg, function(error){
+                    startWaitingForResponse();
+                });
+
 
                 if (TTL - 1 > ToSend.first().ttl) console.log('RETRANSMIT !!');
             }
@@ -81,7 +86,6 @@ var MyBusController = function (callback)
     var onConnectionOpen = function ()
     {
         connectionOpened = true;
-        //lastInterval = setInterval(tick, Interval);
         tick();
         if (callback) callback(_this);
     };

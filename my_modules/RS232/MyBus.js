@@ -12,7 +12,6 @@ var MSG_DATA_LENGTH = 2;
 var MY_ADDRESS = MyBusConfig.MY_ADDRESS;
 
 
-
 //===============================================================
 
 //===============================================================
@@ -84,7 +83,9 @@ var MyBusClass = function (onOpen, onRead)
                 if (msg.getCrc() == myBuffer[myBuffer[MSG_DATA_LENGTH] + 3] && msg.address == MY_ADDRESS)
                 {
                     emitter.emit('data', msg);
-                }else{
+                }
+                else
+                {
                     console.log('CRC Error', myBuffer);
                 }
 
@@ -102,13 +103,17 @@ var MyBusClass = function (onOpen, onRead)
 
     /**
      * @param {MsgClass} msg
-     * @param [onWrite]
+     * @param {RS232OnWrite} [onWrite] Waits until all output data has been transmitted to the serial port. Called once the drain operation returns
      */
     this.write = function (msg, onWrite)
     {
         //console.log(msg);
         //console.log(msg.get());
-        port.write(msg.get(), onWrite);
+        port.write(msg.get(), function (error)
+        {
+            if (error) console.log("Writen faile");
+            port.drain(onWrite);
+        });
     };
 
 };
@@ -137,4 +142,9 @@ module.exports =
  * @callback RS232OnListReady
  * @param err
  * @param {comName, pnpId, manufacturer} ports
+ */
+
+/**
+ * @callback RS232OnWrite
+ * @param err
  */

@@ -1,5 +1,6 @@
 var FirstDevice = require('./DevicesClass/FirstDevice');
 var LcdDevice = require('./DevicesClass/LcdDevice');
+var LcdTimeDevice = require('./DevicesClass/LcdTimeDevice');
 var Device = require('./DevicesClass/Device');
 var MyBusController = require('./MyBusController');
 /**
@@ -24,7 +25,7 @@ var Devices = {
     }(),
     D20: function ()
     {
-        var instance = new LcdDevice(20);
+        var instance = new LcdTimeDevice(20);
         instance.info.InstanceInfo = 'First LCD device.';
         instance.info.Id = 'D20';
         return instance;
