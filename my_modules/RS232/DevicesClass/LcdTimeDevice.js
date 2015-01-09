@@ -60,7 +60,7 @@ var LcdTimeDevice = function (address)
     var msToNextMinute = function ()
     {
         var now = new Date().getTime();
-        return (1000 ) - (now % (1000 ));
+        return (1000 * 60) - (now % (1000 * 60));
     };
 
     var everyMinute = function ()
@@ -69,7 +69,7 @@ var LcdTimeDevice = function (address)
         setTimeout(everyMinute, msToNextMinute());
     };
     everyMinute();
-    setTimeout(everyMinute, msToNextMinute());
+    //setTimeout(everyMinute, msToNextMinute());
 
 };
 
