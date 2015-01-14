@@ -53,45 +53,59 @@ var MyBusClass = function (onOpen, onRead)
     var myBuffer = [];
     var lastTimeout = 0;
 
-    var port = new SerialPort(MyBusConfig.SERIAL_DEVICE, {
-        baudrate: 9600,
-        databits: 8,
-        stopbits: 1,
-        parity: 'none',
-        parser: function (emitter, buffer)
+
+    var parser = function (emitter, buffer)
+    {
+
+        //console.log('RAW', buffer);
+        for (var i = 0; i < buffer.length; i++)
+            myBuffer.push(buffer[i]);
+
+        if (myBuffer.length < 3)
         {
+            clearTimeout(lastTimeout);
+            lastTimeout = setTimeout(timeOut, timeoutTime);
+        }
+        else if (myBuffer[MSG_DATA_LENGTH] > myBuffer.length - 4)
+        {
+            clearTimeout(lastTimeout);
+            lastTimeout = setTimeout(timeOut, timeoutTime);
+        }
+        else
+        {
+            clearTimeout(lastTimeout);
 
-            //console.log('RAW', buffer);
-            for (var i = 0; i < buffer.length; i++)
-                myBuffer.push(buffer[i]);
-
-            if (myBuffer.length < 3)
+            var msg = parseMsg(myBuffer);
+            if (msg.getCrc() == myBuffer[myBuffer[MSG_DATA_LENGTH] + 3] && msg.address == MY_ADDRESS)
             {
-                clearTimeout(lastTimeout);
-                lastTimeout = setTimeout(timeOut, timeoutTime);
+                emitter.emit('data', msg);
+                myBuffer = myBuffer.slice(myBuffer[MSG_DATA_LENGTH] + 4, myBuffer.length);                              // do it if two message come in the same buffer
+                if(myBuffer.length > 0) parser(emitter, []);                                                                                    // recall this method with empty buffer
             }
-            else if (myBuffer[MSG_DATA_LENGTH] > myBuffer.length - 4)
+            else if (msg.getCrc() != myBuffer[myBuffer[MSG_DATA_LENGTH] + 3])
             {
-                clearTimeout(lastTimeout);
-                lastTimeout = setTimeout(timeOut, timeoutTime);
+                console.log('CRC Error', myBuffer);
+                myBuffer = [];
             }
             else
             {
-                clearTimeout(lastTimeout);
-
-                var msg = parseMsg(myBuffer);
-                if (msg.getCrc() == myBuffer[myBuffer[MSG_DATA_LENGTH] + 3] && msg.address == MY_ADDRESS)
-                {
-                    emitter.emit('data', msg);
-                }
-                else
-                {
-                    console.log('CRC Error', myBuffer);
-                }
-
-                myBuffer = [];
+                console.log('Not for mee', myBuffer.slice(0,myBuffer[MSG_DATA_LENGTH] + 4));
+                myBuffer = myBuffer.slice(myBuffer[MSG_DATA_LENGTH] + 4, myBuffer.length);
+                if(myBuffer.length > 0) parser(emitter, []);
             }
+
+
         }
+    };
+
+
+    var port = new SerialPort(MyBusConfig.SERIAL_DEVICE, {
+        baudrate: 250000,//9600,
+        databits: 8,
+        stopbits: 1,
+        parity: 'none',
+        parser: parser
+
     });
 
     port.on("open", function (error)
