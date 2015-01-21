@@ -35,8 +35,25 @@ var FirstDevice = function (address)
         CMD_TOGGLE_LED0: 3,
 
         CMD_GET_PORTB: 10,
-        CMD_SET_PORTB: 11
+        CMD_SET_PORTB: 11,
+        CMD_HELLO_WORLD: 200
     };
+
+
+    /**
+     *
+     * @param {onCommandExecuted_CMD_HELLO_WORLD} [callback]
+     */
+    this.CmdHelloWorld = function (callback)
+    {
+        var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_HELLO_WORLD);
+        this.MyBusController.send(msg, function (msg)
+        {
+            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_HELLO_WORLD);
+        });
+
+    };
+
 
     /**
      *
@@ -83,6 +100,12 @@ var FirstDevice = function (address)
 
 
 module.exports = FirstDevice;
+
+
+/**
+ * @callback onCommandExecuted_CMD_HELLO_WORLD
+ * @param {boolean} result If command executed successful than true else false
+ */
 
 
 /**

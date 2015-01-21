@@ -24,6 +24,10 @@ myModule.config(function ($routeProvider)
             templateUrl: 'led.html',
             controller: 'ledController'
         }).
+        when('/device-diagnostic.html', {
+            templateUrl: 'device-diagnostic.html',
+            controller: 'deviceDiagnosticController'
+        }).
         otherwise({
             redirectTo: '/actual-temp.html'
         });
@@ -40,6 +44,7 @@ myModule.config(function ($httpProvider)
             responseError: function (rejection)
             {
                 if (rejection.status == '401') location.reload();
+                $.notify('Error: ' + rejection.status + ' ' + JSON.stringify(rejection.config, null, 4), "error");
                 return $q.reject(rejection);
             }
         };
@@ -54,6 +59,10 @@ myModule.factory('AppConfig', function ()
      */
     function APPConfigClass()
     {
+
+        this.devicesDiagnostic = {
+            Interval: 5000
+        };
 
         this.devices = {
             Led: {
@@ -206,7 +215,13 @@ var TimeoutHelper = function ()
      */
     this.setInterval = function (code, delay)
     {
-        if (run) intervals.push(setInterval(code, delay));
+        if (run)
+        {
+            var r = setInterval(code, delay);
+            timeouts.push(r);
+            return r;
+        }
+
     };
     /**
      @param {String|Function} code
@@ -214,7 +229,13 @@ var TimeoutHelper = function ()
      */
     this.setTimeout = function (code, delay)
     {
-        if (run) timeouts.push(setTimeout(code, delay));
+        if (run)
+        {
+            var r = setTimeout(code, delay);
+            timeouts.push(r);
+            return r;
+        }
+
     };
 
 };

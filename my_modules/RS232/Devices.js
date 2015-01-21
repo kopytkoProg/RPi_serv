@@ -29,8 +29,14 @@ var Devices = {
         instance.info.InstanceInfo = 'First LCD device.';
         instance.info.Id = 'D20';
         return instance;
+    }(),
+    D21: function ()
+    {
+        var instance = new LcdTimeDevice(21);
+        instance.info.InstanceInfo = 'First LCD device.';
+        instance.info.Id = 'D21';
+        return instance;
     }()
-
 };
 
 

@@ -57,12 +57,16 @@ var firstDevice = dev.D10;
         next();
     });
 
+    var incorectDeviceResponse = function (req, res)
+    {
+        res.end(JSON.stringify({error: 'Incorrect device'}), 'utf8');
+    };
     //==================================================================================================================
 
     router.get('/:devId/getLedStatus', function (req, res) // list of connected sensors
     {
 
-        myRouter(req.params.devId, 'FirstDevice').do(/** @param {FirstDevice} firstDevice*/ function (firstDevice)
+        myRouter(req.params.devId, 'LcdTimeDevice').do(/** @param {FirstDevice} firstDevice*/ function (firstDevice)
         {
             firstDevice.CmdGetPortB(function (result, portStatus)
             {
@@ -83,7 +87,7 @@ var firstDevice = dev.D10;
             });
         }).else(function ()
         {
-            res.end(JSON.stringify({error: 'Incorrect device'}), 'utf8');
+            incorectDeviceResponse(req, res);
         });
 
     });
@@ -94,7 +98,7 @@ var firstDevice = dev.D10;
     {
 
         var newStatus = (req.body.LED0 ? led0Mask : 0) + (req.body.LED1 ? led1Mask : 0);
-        myRouter(req.params.devId, 'FirstDevice').do(/** @param {FirstDevice} firstDevice*/ function (firstDevice)
+        myRouter(req.params.devId, 'LcdTimeDevice').do(/** @param {FirstDevice} firstDevice*/ function (firstDevice)
         {
             firstDevice.CmdSetPortB(newStatus, function (result)
             {
@@ -109,7 +113,7 @@ var firstDevice = dev.D10;
             });
         }).else(function ()
         {
-            res.end(JSON.stringify({error: 'Incorrect device'}), 'utf8');
+            incorectDeviceResponse(req, res);
         });
 
     });

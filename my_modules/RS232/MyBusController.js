@@ -4,6 +4,7 @@
 var MyBusClass = require('./MyBus').MyBusClass;
 var MsgClass = require('./MsgClass');
 var MyBusConfig = require('./../../config/MyBusConfig');
+var MessageFilter = require('./MessageFilter');
 
 
 Array.prototype.first = function ()
@@ -12,7 +13,7 @@ Array.prototype.first = function ()
 };
 
 
-var ToReceive = [];
+// var ToReceive = [];
 /**
  *
  * @type {Array.<{msg:MsgClass, callback:Function, ttl:Number}>}
@@ -33,7 +34,7 @@ var MyBusController = function (callback)
      */
     var myBus = null;
     var _this = this;
-    var lastInterval;
+    // var lastInterval;
     var connectionOpened = false;
 
 
@@ -62,20 +63,26 @@ var MyBusController = function (callback)
 
             if (--ToSend.first().ttl)
             {
-
-                waitingForResponse = true;
-
-                myBus.write(ToSend.first().msg, function(error){
+                if (MessageFilter.canSendMessage(ToSend.first().msg.address))
+                {
+                    //waitingForResponse = true;
                     startWaitingForResponse();
-                });
 
+                    myBus.write(ToSend.first().msg);
 
-                if (TTL - 1 > ToSend.first().ttl) console.log('RETRANSMIT !!');
+                    if (TTL - 1 > ToSend.first().ttl) console.log('RETRANSMIT !!');
+
+                }
+                else
+                {
+                    console.log('Fail to send because address is disconnected', ToSend[0].msg);
+                    ToSend.shift().callback(null);
+                }
             }
             else
             {
                 stopWaitingForResponse();
-                //restartInterval();
+                MessageFilter.setAsDisconnected(ToSend[0].msg.address, 1000 * 60 /*1 min*/);
                 console.log('Fail to send', ToSend[0].msg);
                 ToSend.shift().callback(null);
             }
@@ -95,18 +102,15 @@ var MyBusController = function (callback)
      */
     var onMessageCome = function (msg)
     {
-
-
+        MessageFilter.setAsConnected(ToSend.first().msg.address);
         ToSend.shift().callback(msg);
         stopWaitingForResponse();
         tick();
-
     };
 
     myBus = new MyBusClass(onConnectionOpen, onMessageCome);
 
     /**
-     *
      * @param msg
      * @param {onResponse} callback
      */

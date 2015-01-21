@@ -25,7 +25,7 @@ var LcdTimeDevice = function (address)
         InstanceInfo: null,
         Id: null,
         Address: address,
-        InstanceOf: 'LcdDevice'
+        InstanceOf: 'LcdTimeDevice'
     };
 
 

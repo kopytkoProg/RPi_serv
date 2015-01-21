@@ -2,6 +2,11 @@ var dev = require('./Devices');
 
 
 for (var i = 1; i < 10; i++) dev.D20.CmdSetPortB(i % 3);
+dev.D21.CmdHelloWorld(function (r)
+{
+    console.log(r);
+});
+
 
 ////dev.D20.CmdPrint('ABCDefghijklmniop', function(){console.log('Ok')});
 //dev.D20.CmdHome(function(){console.log('Ok')});

@@ -36,6 +36,7 @@
     <script type="text/javascript" src="/t/linkNavbarController.js"></script>
     <script type="text/javascript" src="/t/tempComparePlotController.js"></script>
     <script type="text/javascript" src="/t/ledController.js"></script>
+    <script type="text/javascript" src="/t/deviceDiagnosticController.js"></script>
 
     <!--<script type="text/javascript" src="/t/plotDirective.js"></script>-->
 
@@ -61,8 +62,25 @@
                 }
 
 
-
             }
+        });
+
+        $.notify.addStyle('myError', {
+            html:
+            "<div>" +
+                "<div class='clearfix'>" +
+                    "<div class='title' data-notify-html='title' />" +
+                    "<div class='text' data-notify-text='text' />" +
+                "</div>" +
+            "</div>",
+            classes: {
+                base: {
+                    "white-space": "nowrap",
+                    "background-color": "red",
+                    "padding": "5px"
+                }
+            }
+
         });
 
         $.notify.defaults({position: "bottom right"});
@@ -117,6 +135,7 @@
                 <li active-link="active"><a href="#/temp-history.html">Temperatures history</a></li>
                 <li active-link="active"><a href="#/temp-compare-history.html">Compare temperature history</a></li>
                 <li active-link="active"><a href="#/led.html">Led</a></li>
+                <li active-link="active"><a href="#/device-diagnostic.html">Device diagnostic</a></li>
             </ul>
 
 
@@ -168,6 +187,52 @@
 
 </body>
 </html>
+
+
+<script type="text/ng-template" id="device-diagnostic.html">
+    <h3>Device diagnostic</h3>
+
+    <table class="table">
+        <tr>
+            <th>Address</th>
+            <th>Id</th>
+            <th>Instance info</th>
+            <th>Last fail</th>
+            <th>Last success</th>
+            <th>Next probe interval</th>
+            <th></th>
+        </tr>
+        <tr ng-repeat="i in filterList" ng-class="{'bg-danger': (i.lastFail > i.lastSuccess), 'bg-success': (i.lastFail <= i.lastSuccess)}">
+            <td class="col-xs-1">{{i.address}}</td>
+            <td class="col-xs-1">{{i.id}}</td>
+            <td class="col-xs-2">{{i.instanceInfo}}</td>
+            <td class="col-xs-2">{{i.lastFail}}</td>
+            <td class="col-xs-2">{{i.lastSuccess}}</td>
+            <td class="col-xs-2">{{i.nextProbeInterval}}</td>
+            <td class="col-xs-2"><button ng-click="test(i.address)">Test: {{i.address}}</button></td>
+        </tr>
+    </table>
+    <!--<div class="row">-->
+        <!--<div class="col-xs-1 he">Address</div>-->
+        <!--<div class="col-xs-1 he">Id</div>-->
+        <!--<div class="col-xs-2">Instance info</div>-->
+        <!--<div class="col-xs-2">Last fail</div>-->
+        <!--<div class="col-xs-2">Last success</div>-->
+        <!--<div class="col-xs-2">Next probe interval</div>-->
+        <!--<div class="col-xs-2"></div>-->
+    <!--</div>-->
+    <!--<div class="row " ng-repeat="i in filterList" ng-class="{'bg-danger': (i.lastFail > i.lastSuccess), 'bg-success': (i.lastFail <= i.lastSuccess)}">-->
+        <!--<div class="col-xs-1">{{i.address}}</div>-->
+        <!--<div class="col-xs-1">{{i.id}}</div>-->
+        <!--<div class="col-xs-2">{{i.instanceInfo}}</div>-->
+        <!--<div class="col-xs-2">{{i.lastFail}}</div>-->
+        <!--<div class="col-xs-2">{{i.lastSuccess}}</div>-->
+        <!--<div class="col-xs-2">{{i.nextProbeInterval}}</div>-->
+        <!--<div class="col-xs-2"><button ng-click="test(i.address)">Test: {{i.address}}</button></div>-->
+    <!--</div>-->
+
+</script>
+
 
 <script type="text/ng-template" id="led.html">
     <h3>LED <i class="fa fa-refresh fa-spin" ng-show="InProgress"></i></h3>

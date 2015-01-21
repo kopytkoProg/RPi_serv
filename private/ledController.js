@@ -15,7 +15,7 @@ myModule.controller('ledController',
         var loadData = function ()
         {
             var time = lastStaterSendTime;
-            $http.get('/api/devices/D10/getLedStatus').
+            $http.get('/api/devices/D20/getLedStatus').
                 success(function (data, status, headers, config)
                 {
                     if (!data.error)
@@ -52,7 +52,7 @@ myModule.controller('ledController',
                 if (!done)  $scope.InProgress = true;
             }, 500);
 
-            $http.put('/api/devices/D10/setLedStatus', $scope.Leds).
+            $http.put('/api/devices/D20/setLedStatus', $scope.Leds).
                 success(function (data, status, headers, config)
                 {
                     $scope.InProgress = false;

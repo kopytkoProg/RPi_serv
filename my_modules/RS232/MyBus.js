@@ -115,6 +115,16 @@ var MyBusClass = function (onOpen, onRead)
         port.on('data', onRead);
     });
 
+    port.on("close", function (error)
+    {
+        console.log("Serial port close");
+    });
+
+    port.on("error", function (error)
+    {
+        console.log("Serial port error");
+    });
+
     /**
      * @param {MsgClass} msg
      * @param {RS232OnWrite} [onWrite] Waits until all output data has been transmitted to the serial port. Called once the drain operation returns
@@ -126,7 +136,8 @@ var MyBusClass = function (onOpen, onRead)
         port.write(msg.get(), function (error)
         {
             if (error) console.log("Writen faile");
-            port.drain(onWrite);
+            //if(onWrite) port.drain(onWrite);
+            if(onWrite) onWrite(error);
         });
     };
 
