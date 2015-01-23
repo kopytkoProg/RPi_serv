@@ -77,6 +77,7 @@ var MyBusController = function (callback)
                 {
                     console.log('Fail to send because address is disconnected', ToSend[0].msg);
                     ToSend.shift().callback(null);
+                    tick();
                 }
             }
             else
@@ -85,6 +86,7 @@ var MyBusController = function (callback)
                 MessageFilter.setAsDisconnected(ToSend[0].msg.address, 1000 * 60 /*1 min*/);
                 console.log('Fail to send', ToSend[0].msg);
                 ToSend.shift().callback(null);
+                tick();
             }
         }
         //else emptyTick = true;                  // it can provide errors because sometimes no interval between requests

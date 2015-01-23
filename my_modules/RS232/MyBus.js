@@ -100,7 +100,7 @@ var MyBusClass = function (onOpen, onRead)
 
 
     var port = new SerialPort(MyBusConfig.SERIAL_DEVICE, {
-        baudrate: 250000,//9600,
+        baudrate: 38400,//9600,
         databits: 8,
         stopbits: 1,
         parity: 'none',
