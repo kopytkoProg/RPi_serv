@@ -176,7 +176,7 @@ myModule.controller('tempComparePlotController',
                             data: historyArray[sensorHistory].reduce(function (acc, e)
                             {
                                 var d = new Date(e.date);
-                                d.setFullYear(1970,0,1);
+                                d.setFullYear(1970, 0, 1);
                                 acc.push(
                                     [
                                         d.getTime() + (-d.getTimezoneOffset() * 60 * 1000),

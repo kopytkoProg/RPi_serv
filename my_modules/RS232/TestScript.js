@@ -1,11 +1,29 @@
 var dev = require('./Devices');
+var SensorScanner = require('./../PeopleSensor/SensorScanner');
+var SensorsHistory = require('./../PeopleSensor/SensorsHistory');
+
+//for (var i = 1; i < 1000; i++) dev.D20.CmdSetPortB(i % 3);
 
 
-for (var i = 1; i < 1000; i++) dev.D20.CmdSetPortB(i % 3);
-//dev.D21.CmdHelloWorld(function (r)
-//{
-//    console.log(r);
-//});
+dev.D30.CmdHelloWorld(function (r)
+{
+    console.log(r);
+});
+
+dev.D30.CmdGetCounter(function (stat, counter)
+{
+    if (stat) console.log("counter64: " + counter);
+});
+
+SensorScanner.addListener(function (moveSinceLastTime)
+{
+   // console.log(moveSinceLastTime);
+});
+
+SensorsHistory.getHistory(function(h){
+    console.log(h);
+}, new Date());
+
 
 
 ////dev.D20.CmdPrint('ABCDefghijklmniop', function(){console.log('Ok')});

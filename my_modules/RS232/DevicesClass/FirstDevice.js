@@ -1,7 +1,7 @@
 /**
  * Created by michal on 2014-12-21.
  */
-var Device = require('./Device');
+var DeviceHelloWorld = require('./DeviceHelloWorld');
 var MsgClass = require('./../MsgClass');
 
 /**
@@ -26,33 +26,16 @@ var FirstDevice = function (address)
     };
 
     var _this = this;
-    this.__proto__ = Device;
+    this.__proto__ = new DeviceHelloWorld();
 
     this.Address = address;
-    this.AvailableCommands = {
-        CMD_ENABLE_LED0: 1,
-        CMD_DISABLE_LED0: 2,
-        CMD_TOGGLE_LED0: 3,
 
-        CMD_GET_PORTB: 10,
-        CMD_SET_PORTB: 11,
-        CMD_HELLO_WORLD: 200
-    };
+    this.AvailableCommands.CMD_ENABLE_LED0 = 1;
+    this.AvailableCommands.CMD_DISABLE_LED0 = 2;
+    this.AvailableCommands.CMD_TOGGLE_LED0 = 3;
 
-
-    /**
-     *
-     * @param {onCommandExecuted_CMD_HELLO_WORLD} [callback]
-     */
-    this.CmdHelloWorld = function (callback)
-    {
-        var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_HELLO_WORLD);
-        this.MyBusController.send(msg, function (msg)
-        {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_HELLO_WORLD);
-        });
-
-    };
+    this.AvailableCommands.CMD_GET_PORTB = 10;
+    this.AvailableCommands.CMD_SET_PORTB = 11;
 
 
     /**
@@ -100,12 +83,6 @@ var FirstDevice = function (address)
 
 
 module.exports = FirstDevice;
-
-
-/**
- * @callback onCommandExecuted_CMD_HELLO_WORLD
- * @param {boolean} result If command executed successful than true else false
- */
 
 
 /**

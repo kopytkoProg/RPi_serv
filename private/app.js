@@ -28,6 +28,11 @@ myModule.config(function ($routeProvider)
             templateUrl: 'device-diagnostic.html',
             controller: 'deviceDiagnosticController'
         }).
+        when('/move-sensors-history.html', {
+            templateUrl: 'move-sensors-history.html',
+            controller: 'moveSensorsHistoryController'
+        }).
+
         otherwise({
             redirectTo: '/actual-temp.html'
         });
@@ -59,9 +64,46 @@ myModule.factory('AppConfig', function ()
      */
     function APPConfigClass()
     {
+        var _this = this;
+        this.global = {
+            monthsName: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+            plot: {
+                getHourTickSize: function (plotElement)
+                {
+                    var width = $(plotElement).width();
+                    if (width < 800) return [4, 'hour'];
+                    else if (width < 800) return [2, 'hour'];
+                    else return [1, 'hour'];
+                },
+                setHeightByWidth: function (plotElement)
+                {
+                    var width = $(plotElement).width();
+                    if (width > 1000) $(plotElement).height(600);
+                    else $(plotElement).height(400);
+                },
+                DelayBeforeAcceptResizing: 200
+            }
+        };
 
         this.devicesDiagnostic = {
             Interval: 5000
+        };
+
+        this.sensors = {
+            Interval: 1000 * 60 * 5
         };
 
         this.devices = {
@@ -103,21 +145,23 @@ myModule.factory('AppConfig', function ()
 
                 return msLeftToNextDay;
             },
-            getHourTickSize: function (plotElement)
-            {
-                var width = $(plotElement).width();
-                if (width < 800) return [4, 'hour'];
-                else if (width < 800) return [2, 'hour'];
-                else return [1, 'hour'];
-            },
-            setHeightByWidth: function (plotElement)
-            {
-                var width = $(plotElement).width();
-                if (width > 1000) $(plotElement).height(600);
-                else $(plotElement).height(400);
-            }
+            getHourTickSize: _this.global.plot.getHourTickSize /*function (plotElement)
+             {
+             var width = $(plotElement).width();
+             if (width < 800) return [4, 'hour'];
+             else if (width < 800) return [2, 'hour'];
+             else return [1, 'hour'];
+             }*/,
+            setHeightByWidth: _this.global.plot.setHeightByWidth/* function (plotElement)
+             {
+             var width = $(plotElement).width();
+             if (width > 1000) $(plotElement).height(600);
+             else $(plotElement).height(400);
+             }*/
 
         };
+
+
         // -----------------------------------------------------------------
         this.callOrVal = function (v)
         {
@@ -238,6 +282,18 @@ var TimeoutHelper = function ()
 
     };
 
+
+    /**
+     * This function return number of millisecond remaining to next full timeSpan.
+     * @param {number} timeSpan for example if it is 5min and time is 15:23 then return value is time in ms to 15:25.
+     * @param {Date} [date] date to compute tick if null then current time used.
+     */
+    this.getTimeOfNextTick = function (timeSpan, date)
+    {
+        date = date || new Date();
+        var t = timeSpan - (date.getTime() % (timeSpan));
+        return t;
+    };
 };
 
 

@@ -37,6 +37,8 @@
     <script type="text/javascript" src="/t/tempComparePlotController.js"></script>
     <script type="text/javascript" src="/t/ledController.js"></script>
     <script type="text/javascript" src="/t/deviceDiagnosticController.js"></script>
+    <script type="text/javascript" src="/t/moveSensorsHistoryController.js"></script>
+
 
     <!--<script type="text/javascript" src="/t/plotDirective.js"></script>-->
 
@@ -136,6 +138,8 @@
                 <li active-link="active"><a href="#/temp-compare-history.html">Compare temperature history</a></li>
                 <li active-link="active"><a href="#/led.html">Led</a></li>
                 <li active-link="active"><a href="#/device-diagnostic.html">Device diagnostic</a></li>
+                <li active-link="active"><a href="#/move-sensors-history.html">Move sensors history</a></li>
+
             </ul>
 
 
@@ -189,6 +193,20 @@
 </html>
 
 
+<script type="text/ng-template" id="move-sensors-history.html">
+
+
+    <div style="position: relative; overflow: hidden">
+        <div style=" margin: 20px 0 10px 0">
+            <select class="form-control" style="float: right; width:auto; margin:10px 0px 10px 10px;"
+                    ng-model="selectedHistory" ng-options="h.text for h in listsOfHistories"
+                    ng-change="getData()">
+            </select>
+        </div>
+    </div>
+    <div id="plots"></div>
+</script>
+
 <script type="text/ng-template" id="device-diagnostic.html">
     <h3>Device diagnostic</h3>
 
@@ -212,27 +230,7 @@
             <td class="col-xs-2"><button ng-click="test(i.address)">Test: {{i.address}}</button></td>
         </tr>
     </table>
-    <!--<div class="row">-->
-        <!--<div class="col-xs-1 he">Address</div>-->
-        <!--<div class="col-xs-1 he">Id</div>-->
-        <!--<div class="col-xs-2">Instance info</div>-->
-        <!--<div class="col-xs-2">Last fail</div>-->
-        <!--<div class="col-xs-2">Last success</div>-->
-        <!--<div class="col-xs-2">Next probe interval</div>-->
-        <!--<div class="col-xs-2"></div>-->
-    <!--</div>-->
-    <!--<div class="row " ng-repeat="i in filterList" ng-class="{'bg-danger': (i.lastFail > i.lastSuccess), 'bg-success': (i.lastFail <= i.lastSuccess)}">-->
-        <!--<div class="col-xs-1">{{i.address}}</div>-->
-        <!--<div class="col-xs-1">{{i.id}}</div>-->
-        <!--<div class="col-xs-2">{{i.instanceInfo}}</div>-->
-        <!--<div class="col-xs-2">{{i.lastFail}}</div>-->
-        <!--<div class="col-xs-2">{{i.lastSuccess}}</div>-->
-        <!--<div class="col-xs-2">{{i.nextProbeInterval}}</div>-->
-        <!--<div class="col-xs-2"><button ng-click="test(i.address)">Test: {{i.address}}</button></div>-->
-    <!--</div>-->
-
 </script>
-
 
 <script type="text/ng-template" id="led.html">
     <h3>LED <i class="fa fa-refresh fa-spin" ng-show="InProgress"></i></h3>
@@ -256,7 +254,6 @@
     </div>
 
 </script>
-
 
 <script type="text/ng-template" id="actual-temp.html">
     <h3>Temps</h3>

@@ -76,6 +76,7 @@ var MyBusClass = function (onOpen, onRead)
             clearTimeout(lastTimeout);
 
             var msg = parseMsg(myBuffer);
+
             if (msg.getCrc() == myBuffer[myBuffer[MSG_DATA_LENGTH] + 3] && msg.address == MY_ADDRESS)
             {
                 emitter.emit('data', msg);

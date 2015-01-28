@@ -65,6 +65,17 @@ passport.use('login', new LocalStrategy({
 
 //=======================================================
 
+//=======================================================
+//      modules run
+//=======================================================
+
+(function (){
+
+    var SensorsHistory = require('./my_modules/PeopleSensor/SensorsHistory');
+    var SensorScanner = require('./my_modules/PeopleSensor/SensorScanner');
+
+})();
+
 
 //=======================================================
 //      Pages
@@ -82,6 +93,7 @@ app.use('/api/test', isAuthenticated.sendUnauthorizedIfUnauthenticated, require(
 app.use('/api/ps', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/ps/ps'));
 app.use('/api/os', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/os/os'));
 app.use('/api/devices/diagnostic', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/devices/diagnostic'));
+app.use('/api/sensors/moveSensors', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/sensors/moveSensors'));
 
 
 app.use('/t/', isAuthenticated.redirectIfNotAuthenticated, express.static(path.join(__dirname, 'private')));
