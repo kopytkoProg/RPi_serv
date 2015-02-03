@@ -12,25 +12,18 @@ var MsgClass = require('./../MsgClass');
  * @constructor FirstDevice
  * @extends Device
  */
-var PeopleSensorDevice = function (address)
+function PeopleSensorDevice(address)
 {
-    /**
-     * Device description
-     * @type {{ClassInfo: string, InstanceInfo: null, Id: null}}
-     */
-
-    this.info = {
-        ClassInfo: 'It is a Class to control two leds',
-        InstanceInfo: null,
-        Id: null,
-        Address: address,
-        InstanceOf: 'FirstDevice'
-    };
 
     var _this = this;
-    this.__proto__ = new DeviceHelloWorld();
+    this.__proto__ = new DeviceHelloWorld(address);
+    this.constructor = PeopleSensorDevice;
 
-    this.Address = address;
+    this.info.ClassInfo = 'It is a Class to control two leds';
+
+
+
+
 
     this.AvailableCommands.CMD_GET_COUNTER = 1;
     this.AvailableCommands.CMD_GET_64b_COUNTER = 2;
@@ -43,9 +36,9 @@ var PeopleSensorDevice = function (address)
     this.CmdGetCounter8b = function (callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_GET_COUNTER);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_GET_COUNTER, msg ? msg.data[0] : null);
+            if (callback) callback(error ? false : true, error ? null : msg.data[0]);
         });
 
     };
@@ -57,21 +50,22 @@ var PeopleSensorDevice = function (address)
     this.CmdGetCounter = function (callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_GET_64b_COUNTER);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
             var unsignedLong = null;
-            if (msg && msg.command == _this.AvailableCommands.CMD_GET_64b_COUNTER)
+            if (!error)
             {
                 unsignedLong = 0;
                 for (var i = 0; i < 8; i++) unsignedLong += msg.data[i] * (Math.pow(256, i));
             }
 
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_GET_64b_COUNTER, msg ? unsignedLong : null);
+            if (callback) callback(error ? false : true, error ? null : unsignedLong);
         });
 
     };
 
-};
+}
+//PeopleSensorDevice.prototype = new DeviceHelloWorld();
 
 
 module.exports = PeopleSensorDevice;

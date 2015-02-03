@@ -17,6 +17,17 @@ var temp = function (callback)
 
     list(function (l)
     {
+
+        var f = function ()
+        {   // wait until end all measure
+            if (temps.length + crcErrors.length != l.length)
+            else callback(temps.sort(function (a, b)
+            {
+                return a.id.localeCompare(b.id);
+            }));
+        };
+
+
         l.forEach(function (id)
         {
             exec("cat /sys/bus/w1/devices/" + id + "/w1_slave",
@@ -67,20 +78,14 @@ var temp = function (callback)
                             name: descObj.name
                         });
                     }
+
+                    f();
                 });
 
 
         });
 
-        var f = function ()
-        {   // wait until end all measure
-            if (temps.length + crcErrors.length != l.length) setTimeout(f, 200);
-            else callback(temps.sort(function (a, b)
-            {
-                return a.id.localeCompare(b.id);
-            }));
-        };
-        f();
+
     });
 };
 

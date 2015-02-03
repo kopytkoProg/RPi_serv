@@ -57,12 +57,19 @@ myModule.controller('ledController',
                 {
                     $scope.InProgress = false;
                     done = true;
+
+                    if (data.error)
+                    {
+                        $.notify('Error: ' + JSON.stringify(data, null, 4), "error");
+                    }
+
                 }).
                 error(function (data, status, headers, config)
                 {
                     $scope.InProgress = false;
                     $.notify('Error: ' + JSON.stringify(data, null, 4), "error");
                     done = true;
+
                 });
         };
         $scope.sendNewLedStatus = sendNewLedStatus;

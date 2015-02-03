@@ -10,7 +10,7 @@ var MsgClass = require('./../MsgClass');
  * @constructor FirstDevice
  * @extends Device
  */
-var DeviceHelloWorld = function (address)
+function DeviceHelloWorld(address)
 {
 
     /**
@@ -20,12 +20,13 @@ var DeviceHelloWorld = function (address)
         ClassInfo: 'It is a Class to say hello world to device',
         InstanceInfo: null,
         Id: null,
-        Address: address,
-        InstanceOf: 'DeviceHelloWorld'
+        Address: address
     };
 
+    this.constructor = DeviceHelloWorld;
+
     var _this = this;
-    this.__proto__ = Device;
+
 
     this.Address = address;
     this.AvailableCommands = {
@@ -40,17 +41,17 @@ var DeviceHelloWorld = function (address)
     this.CmdHelloWorld = function (callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_HELLO_WORLD);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_HELLO_WORLD);
+            if (callback) callback(error ? false : true);
         });
 
     };
 
 
 
-};
-
+}
+DeviceHelloWorld.prototype = Device;
 
 module.exports = DeviceHelloWorld;
 

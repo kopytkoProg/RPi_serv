@@ -28,11 +28,23 @@ var SensorsHistory = function ()
             }, null);
             if (!item)
             {
-                item = {id: e.id, moveSinceLastTime: false};
+                item = {id: e.id, moveSinceLastTime: null};
                 sensors.push(item)
             }
 
-            item.moveSinceLastTime = item.moveSinceLastTime || e.moveDetectedSinceLastTime;
+            // Do that because null sey "no info about move" and it is important to sey that in the 5 min was only "no info about move"
+            // Iv any proper move info then the hol 5 min is proper
+            // (
+            //      Order of elements:  (false || null)
+            //          null = (false || null)
+            //          false = (null || false)
+            // )
+
+            if (item.moveSinceLastTime == false)
+                item.moveSinceLastTime = item.moveSinceLastTime || (e.moveDetectedSinceLastTime ? true : false);
+            else
+                item.moveSinceLastTime = item.moveSinceLastTime || e.moveDetectedSinceLastTime;
+
             // console.log("item", item);
         });
     });

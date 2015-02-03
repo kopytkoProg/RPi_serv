@@ -10,23 +10,16 @@ var MsgClass = require('./../MsgClass');
  * @constructor FirstDevice
  * @extends LcdDevice
  */
-var LcdTimeDevice = function (address)
+function LcdTimeDevice(address)
 {
 
-    this.__proto__ = new LcdDevice(address);
     var _this = this;
+    this.__proto__ = new LcdDevice(address);
+    this.constructor = LcdTimeDevice;
 
-    /**
-     * Device description
-     * @type {{ClassInfo: string, InstanceInfo: null, Id: null}}
-     */
-    this.info = {
-        ClassInfo: 'It is a Class to display time',
-        InstanceInfo: null,
-        Id: null,
-        Address: address,
-        InstanceOf: 'LcdTimeDevice'
-    };
+
+    this.info.ClassInfo = 'It is a Class to display time';
+
 
 
     var dateToNumberTimeArray = function (date){
@@ -71,8 +64,8 @@ var LcdTimeDevice = function (address)
     everyMinute();
     //setTimeout(everyMinute, msToNextMinute());
 
-};
-
+}
+//LcdTimeDevice.prototype = new LcdDevice();
 
 module.exports = LcdTimeDevice;
 

@@ -12,7 +12,18 @@ var Device = {
     MyBusController: null,
     Address: null,
     Description: null,
-    AvailableCommands: {}
+    AvailableCommands: {},
+    isInstanceOfDevice: function (classToCheck)
+    {
+        var o = this;
+        while (o)
+        {
+            if (o.constructor == classToCheck)  return true;
+            o = o.__proto__;
+        }
+        return false
+    }
+
 };
 
 module.exports = Device;

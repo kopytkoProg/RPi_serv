@@ -76,6 +76,17 @@ myModule.controller('tempPlotController',
             timeoutHelper.setTimeout(loadData, AppConfig.tempHistory.StartDelay);
         });
 
+
+        $("<div id='tooltip'></div>").css({
+            position: "absolute",
+            display: "none",
+            border: "1px solid #fdd",
+            padding: "5px",
+            "background-color": "#fee",
+            opacity: 0.90,
+            "border-radius": "10px"
+        }).appendTo("#viewContainer");
+
         var plot = null;
         /**
          *
@@ -100,10 +111,11 @@ myModule.controller('tempPlotController',
                         data: historyArray[sensorHistory].reduce(function (acc, e)
                         {
                             var d = new Date(e.date);
-                            d.setFullYear(1970, 0, 1);
+                            //d.setFullYear(1970, 0, 1);
                             acc.push(
                                 [
-                                    d.getTime() + (-d.getTimezoneOffset() * 60 * 1000),
+                                    //d.getTime() + (-d.getTimezoneOffset() * 60 * 1000),
+                                    (d.getTime() + (-d.getTimezoneOffset() * 60 * 1000)) % (1000 * 60 * 60 * 24),
                                     e.temp
                                 ]);
                             return acc;
@@ -136,6 +148,12 @@ myModule.controller('tempPlotController',
                     min: xMin.getTime(),
                     max: xMax.getTime()
                 },
+                yaxis:{
+                    tickSize: 1
+                },
+                grid: {
+                    hoverable: true
+                },
                 legend: {
                     labelFormatter: function (label, series)
                     {
@@ -148,6 +166,36 @@ myModule.controller('tempPlotController',
             {
                 togglePlot($(this).attr('series'));
                 $(this).toggleClass('text-muted');
+            });
+
+
+            $('#plot').bind("plothover", function (event, pos, item)
+            {
+
+                if (item)
+                {
+                    var time = item.datapoint[0],
+                        temp = item.datapoint[1].toFixed(1);
+
+                    var d = new Date(time);
+                    d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000);
+
+                    var h = d.getHours(),
+                        m = d.getMinutes();
+
+
+                    var stringDate = h + ":" + (m < 10 ? '0' : '') + m;
+
+
+                    $("#tooltip").html(temp + ' C at ' + stringDate)
+                        .css({top: item.pageY + 20, left: item.pageX + 20})
+                        .show();
+                }
+                else
+                {
+                    $("#tooltip").hide();
+                }
+
             });
 
 

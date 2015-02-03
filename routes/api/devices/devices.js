@@ -7,8 +7,7 @@
 var express = require('express');
 var router = express.Router();
 var dev = require('./../../../my_modules/RS232/Devices');
-
-var firstDevice = dev.D10;
+var FirstDevice = require('./../../../my_modules/RS232/DevicesClass/FirstDevice');
 
 (function ()
 {
@@ -35,7 +34,7 @@ var firstDevice = dev.D10;
 
         var result = {};
         result.dev = dev;
-        result.condition = dev && (!devClass || dev.info.InstanceOf == devClass);
+        result.condition = dev && (!devClass || dev.isInstanceOfDevice(devClass));
         result.do = function (callback)
         {
             if (this.condition) callback(dev);
@@ -51,11 +50,11 @@ var firstDevice = dev.D10;
     };
     //==================================================================================================================
 
-    router.use(function (req, res, next)
-    {
-        res.writeHead(200, {'Content-Type': 'text/json'});
-        next();
-    });
+    //router.use(function (req, res, next)
+    //{
+    //    res.writeHead(200, {'Content-Type': 'text/json'});
+    //    next();
+    //});
 
     var incorectDeviceResponse = function (req, res)
     {
@@ -65,8 +64,8 @@ var firstDevice = dev.D10;
 
     router.get('/:devId/getLedStatus', function (req, res) // list of connected sensors
     {
-
-        myRouter(req.params.devId, 'LcdTimeDevice').do(/** @param {FirstDevice} firstDevice*/ function (firstDevice)
+        res.writeHead(200, {'Content-Type': 'text/json'});
+        myRouter(req.params.devId, FirstDevice).do(/** @param {FirstDevice} firstDevice*/ function (firstDevice)
         {
             firstDevice.CmdGetPortB(function (result, portStatus)
             {
@@ -96,9 +95,9 @@ var firstDevice = dev.D10;
 
     router.put('/:devId/setLedStatus', function (req, res) // list of connected sensors
     {
-
+        res.writeHead(200, {'Content-Type': 'text/json'});
         var newStatus = (req.body.LED0 ? led0Mask : 0) + (req.body.LED1 ? led1Mask : 0);
-        myRouter(req.params.devId, 'LcdTimeDevice').do(/** @param {FirstDevice} firstDevice*/ function (firstDevice)
+        myRouter(req.params.devId, FirstDevice).do(/** @param {FirstDevice} firstDevice*/ function (firstDevice)
         {
             firstDevice.CmdSetPortB(newStatus, function (result)
             {

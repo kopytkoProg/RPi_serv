@@ -76,7 +76,7 @@ var MyBusController = function (callback)
                 else
                 {
                     console.log('Fail to send because address is disconnected', ToSend[0].msg);
-                    ToSend.shift().callback(null);
+                    ToSend.shift().callback('Fail to send because address is disconnected');
                     tick();
                 }
             }
@@ -85,7 +85,7 @@ var MyBusController = function (callback)
                 stopWaitingForResponse();
                 MessageFilter.setAsDisconnected(ToSend[0].msg.address, 1000 * 60 /*1 min*/);
                 console.log('Fail to send', ToSend[0].msg);
-                ToSend.shift().callback(null);
+                ToSend.shift().callback("Fail to send", null);
                 tick();
             }
         }
@@ -108,8 +108,9 @@ var MyBusController = function (callback)
 
         if (ToSend.length)
         {
-            MessageFilter.setAsConnected(ToSend.first().msg.address);
-            ToSend.shift().callback(msg);
+            var first = ToSend.first();
+            MessageFilter.setAsConnected(first.msg.address);
+            ToSend.shift().callback(msg.command == first.msg.command ? null : "Command received is not equal to sent", msg);
             stopWaitingForResponse();
             tick();
         }else{
@@ -136,6 +137,7 @@ module.exports = MyBusController;
 
 /**
  * @callback onResponse
+ * @param  error
  * @param {MsgClass} msg
  */
 

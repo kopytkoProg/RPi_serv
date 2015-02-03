@@ -10,23 +10,15 @@ var MsgClass = require('./../MsgClass');
  * @constructor FirstDevice
  * @extends FirstDevice
  */
-var LcdDevice = function (address)
+function LcdDevice (address)
 {
 
-    this.__proto__ = new FirstDevice(address);
     var _this = this;
+    this.__proto__ = new FirstDevice(address);
+    this.constructor = LcdDevice;
 
-    /**
-     * Device description
-     * @type {{ClassInfo: string, InstanceInfo: null, Id: null}}
-     */
-    this.info = {
-        ClassInfo: 'It is a Class to control 16x2 lcd',
-        InstanceInfo: null,
-        Id: null,
-        Address: address,
-        InstanceOf: 'LcdDevice'
-    };
+
+    this.info.ClassInfo = 'It is a Class to control 16x2 lcd';
 
 
     this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS = 20;		            // Characters
@@ -50,9 +42,9 @@ var LcdDevice = function (address)
 
         //console.log('=============',asciiCharArray);
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS, asciiCharArray);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS);
+            if (callback) callback(error ? false : true);
         });
     };
 
@@ -63,9 +55,9 @@ var LcdDevice = function (address)
     this.CmdHome = function (callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_HOME);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_LCD_HOME);
+            if (callback) callback(error ? false : true);
         });
 
     };
@@ -77,9 +69,9 @@ var LcdDevice = function (address)
     this.CmdClear = function (callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_CLEAR);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_LCD_CLEAR);
+            if (callback) callback(error ? false : true);
         });
 
     };
@@ -94,9 +86,9 @@ var LcdDevice = function (address)
     this.CmdGoTo = function (x, y, callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_GoTo, [x, y]);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_LCD_GoTo);
+            if (callback) callback(error ? false : true);
         });
 
     };
@@ -114,52 +106,6 @@ var LcdDevice = function (address)
         0, 6, 2, 32, 32, 5,		//	0x39	9
     ];
 
-    //this.CmdPrintBigNumber = function (c, x, y)
-    //{
-    //
-    //    _this.CmdGoTo(x, y);
-    //    var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS, num.slice(c * 6, c * 6 + 3));
-    //    this.MyBusController.send(msg, function (msg)
-    //    {
-    //    });
-    //
-    //
-    //    _this.CmdGoTo(x, y + 1);
-    //    var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS, num.slice(c * 6 + 3, c * 6 + 6));
-    //    this.MyBusController.send(msg, function (msg)
-    //    {
-    //    });
-    //
-    //}
-
-    //this.CmdPrintBigTime = function (c)
-    //{
-    //
-    //
-    //    var top = c.reduce(function (acc, e, i)
-    //    {
-    //        return acc.concat(num.slice(e * 6, e * 6 + 3)).concat([i == 1 ? 161 : 32]);
-    //    }, []);
-    //    var bottom = c.reduce(function (acc, e, i)
-    //    {
-    //        return acc.concat(num.slice(e * 6 + 3, e * 6 + 6)).concat([i == 1 ? 161 : 32]);
-    //    }, []);
-    //
-    //    console.log(top);
-    //    console.log(bottom);
-    //
-    //    _this.CmdGoTo(0, 0);
-    //    var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS, top);
-    //    this.MyBusController.send(msg, function (msg)
-    //    {
-    //    });
-    //    _this.CmdGoTo(0, 1);
-    //    var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS, bottom);
-    //    this.MyBusController.send(msg, function (msg)
-    //    {
-    //    });
-    //
-    //}
 
     /**
      * @param {Array.<Number>} hour 4 element in array
@@ -181,15 +127,15 @@ var LcdDevice = function (address)
 
 
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS_HOME_LINE_WRAPE, top.concat(bottom));
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_LCD_WRITE_CHARACTERS_HOME_LINE_WRAPE);
+            if (callback) callback(error ? false : true);
         });
     };
 
 
-};
-
+}
+//LcdDevice.prototype = new FirstDevice();
 
 module.exports = LcdDevice;
 

@@ -10,25 +10,17 @@ var MsgClass = require('./../MsgClass');
  * @constructor FirstDevice
  * @extends Device
  */
-var FirstDevice = function (address)
+function FirstDevice(address)
 {
-    /**
-     * Device description
-     * @type {{ClassInfo: string, InstanceInfo: null, Id: null}}
-     */
 
-    this.info = {
-        ClassInfo: 'It is a Class to control two leds',
-        InstanceInfo: null,
-        Id: null,
-        Address: address,
-        InstanceOf: 'FirstDevice'
-    };
 
     var _this = this;
-    this.__proto__ = new DeviceHelloWorld();
+    this.__proto__ = new DeviceHelloWorld(address);
+    this.constructor = FirstDevice;
 
-    this.Address = address;
+    this.info.ClassInfo = 'It is a Class to control two leds';
+
+
 
     this.AvailableCommands.CMD_ENABLE_LED0 = 1;
     this.AvailableCommands.CMD_DISABLE_LED0 = 2;
@@ -45,9 +37,9 @@ var FirstDevice = function (address)
     this.CmdToggleLed = function (callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_TOGGLE_LED0);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_TOGGLE_LED0);
+            if (callback) callback(error ? false : true);
         });
 
     };
@@ -59,9 +51,10 @@ var FirstDevice = function (address)
     this.CmdGetPortB = function (callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_GET_PORTB);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_GET_PORTB, msg ? msg.data[0] : null);
+            if (callback) callback(error ? false : true, error ? null : msg.data[0]);
+            //if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_GET_PORTB, msg ? msg.data[0] : null);
         });
 
     };
@@ -72,15 +65,16 @@ var FirstDevice = function (address)
     this.CmdSetPortB = function (value, callback)
     {
         var msg = new MsgClass(this.Address, _this.AvailableCommands.CMD_SET_PORTB, [value]);
-        this.MyBusController.send(msg, function (msg)
+        this.MyBusController.send(msg, function (error, msg)
         {
-            if (callback) callback(msg && msg.command == _this.AvailableCommands.CMD_SET_PORTB);
+            if (callback) callback(error ? false : true);
         });
 
     }
 
-};
 
+}
+//FirstDevice.prototype = new DeviceHelloWorld();
 
 module.exports = FirstDevice;
 
