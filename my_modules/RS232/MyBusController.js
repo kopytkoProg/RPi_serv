@@ -70,7 +70,7 @@ var MyBusController = function (callback)
 
                     myBus.write(ToSend.first().msg);
 
-                    if (TTL - 1 > ToSend.first().ttl) console.log('RETRANSMIT !!');
+                    if (TTL - 1 > ToSend.first().ttl) console.log('RETRANSMIT !! ' + ToSend.first().msg.address);
 
                 }
                 else
@@ -104,10 +104,17 @@ var MyBusController = function (callback)
      */
     var onMessageCome = function (msg)
     {
-        MessageFilter.setAsConnected(ToSend.first().msg.address);
-        ToSend.shift().callback(msg);
-        stopWaitingForResponse();
-        tick();
+        //console.log(msg);
+
+        if (ToSend.length)
+        {
+            MessageFilter.setAsConnected(ToSend.first().msg.address);
+            ToSend.shift().callback(msg);
+            stopWaitingForResponse();
+            tick();
+        }else{
+            console.log('Iam not waiting for msg but i received:', msg);
+        }
     };
 
     myBus = new MyBusClass(onConnectionOpen, onMessageCome);

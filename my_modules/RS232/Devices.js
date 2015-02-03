@@ -25,13 +25,13 @@ var Devices = {
     //    instance.info.Id = 'D10';
     //    return instance;
     //}(),
-    //D20: function ()
-    //{
-    //    var instance = new LcdTimeDevice(20);
-    //    instance.info.InstanceInfo = 'First LCD device.';
-    //    instance.info.Id = 'D20';
-    //    return instance;
-    //}(),
+    D20: function ()
+    {
+        var instance = new LcdTimeDevice(20);
+        instance.info.InstanceInfo = 'First LCD device.';
+        instance.info.Id = 'D20';
+        return instance;
+    }(),
     //D21: function ()
     //{
     //    var instance = new LcdTimeDevice(21);

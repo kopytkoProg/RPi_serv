@@ -68,12 +68,11 @@
         });
 
         $.notify.addStyle('myError', {
-            html:
-            "<div>" +
-                "<div class='clearfix'>" +
-                    "<div class='title' data-notify-html='title' />" +
-                    "<div class='text' data-notify-text='text' />" +
-                "</div>" +
+            html: "<div>" +
+            "<div class='clearfix'>" +
+            "<div class='title' data-notify-html='title' />" +
+            "<div class='text' data-notify-text='text' />" +
+            "</div>" +
             "</div>",
             classes: {
                 base: {
@@ -94,8 +93,11 @@
         }
 
         .navbar-width {
-            width: 60px;
-            display: inline-block
+
+            display: inline-block;
+            font-size: 0.9em;
+            margin-left: 10px;
+            text-align: center;
         }
 
         .font-small {
@@ -133,12 +135,33 @@
 
 
             <ul class="nav navbar-nav" ng-controller="linkNavbarController">
-                <li active-link="active"><a href="#/actual-temp.html">Temperature</a></li>
-                <li active-link="active"><a href="#/temp-history.html">Temperatures history</a></li>
-                <li active-link="active"><a href="#/temp-compare-history.html">Compare temperature history</a></li>
-                <li active-link="active"><a href="#/led.html">Led</a></li>
-                <li active-link="active"><a href="#/device-diagnostic.html">Device diagnostic</a></li>
-                <li active-link="active"><a href="#/move-sensors-history.html">Move sensors history</a></li>
+
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Temperature<span
+                                class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li active-link="active"><a href="#/actual-temp.html">Temperature</a></li>
+                        <li active-link="active"><a href="#/temp-history.html">Temperatures history</a></li>
+                        <li active-link="active"><a href="#/temp-compare-history.html">Compare temperature history</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Device<span
+                                class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li active-link="active"><a href="#/led.html">Led</a></li>
+                        <li active-link="active"><a href="#/device-diagnostic.html">Device diagnostic</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Sensors<span
+                                class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li active-link="active"><a href="#/move-sensors-history.html">Move sensors history</a></li>
+                    </ul>
+                </li>
+
 
             </ul>
 
@@ -148,19 +171,30 @@
 
             </ul>
 
-            <div class="navbar-text navbar-right" ng-controller="osNavbarController">
+            <div class="navbar-text navbar-right" ng-controller="osNavbarController" style="margin: 8px">
 
-                <span class="text-muted font-small">DISK({{diskName}}):</span>
-                <span class="navbar-width text-left"><b>{{disk}} %</b></span>
 
-                <span class="text-muted font-small">MEM:</span>
-                <span class="navbar-width text-left"><b>{{mem}} %</b></span>
+                <div class="navbar-width">
+                    <div class="text-muted font-small">DISK({{diskName}}):</div>
+                    <div class=""><b>{{disk}} %</b></div>
+                </div>
 
-                <span class="text-muted font-small">CPU:</span>
-                <span class="navbar-width text-left"><b>{{cpu}} %</b></span>
+                <div class="navbar-width">
+                    <div class="text-muted font-small">MEM:</div>
+                    <div class=""><b>{{mem}} %</b></div>
+                </div>
+                <div class="navbar-width">
+                    <div class="text-muted font-small">CPU:</div>
+                    <div class=""><b>{{cpu}} %</b></div>
+                </div>
+                <div class="navbar-width">
+                    <div class="text-muted font-small">CORE TEMP:</div>
+                    <div class=""><b>{{core_temp}} C</b></div>
+                </div>
 
-                <span class="text-muted font-small">CORE TEMP:</span>
-                <span class="navbar-width text-left"><b>{{core_temp}} C</b></span>
+
+
+
             </div>
 
 
@@ -220,14 +254,17 @@
             <th>Next probe interval</th>
             <th></th>
         </tr>
-        <tr ng-repeat="i in filterList" ng-class="{'bg-danger': (i.lastFail > i.lastSuccess), 'bg-success': (i.lastFail <= i.lastSuccess)}">
+        <tr ng-repeat="i in filterList"
+            ng-class="{'bg-danger': (i.lastFail > i.lastSuccess), 'bg-success': (i.lastFail <= i.lastSuccess)}">
             <td class="col-xs-1">{{i.address}}</td>
             <td class="col-xs-1">{{i.id}}</td>
             <td class="col-xs-2">{{i.instanceInfo}}</td>
             <td class="col-xs-2">{{i.lastFail}}</td>
             <td class="col-xs-2">{{i.lastSuccess}}</td>
             <td class="col-xs-2">{{i.nextProbeInterval}}</td>
-            <td class="col-xs-2"><button ng-click="test(i.address)">Test: {{i.address}}</button></td>
+            <td class="col-xs-2">
+                <button ng-click="test(i.address)">Test: {{i.address}}</button>
+            </td>
         </tr>
     </table>
 </script>
