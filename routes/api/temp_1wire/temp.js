@@ -20,7 +20,7 @@ var temp = function (callback)
 
         var f = function ()
         {   // wait until end all measure
-            if (temps.length + crcErrors.length != l.length)
+            if (temps.length + crcErrors.length != l.length) 
             else callback(temps.sort(function (a, b)
             {
                 return a.id.localeCompare(b.id);
