@@ -45,7 +45,11 @@ var MyBusController = function (callback)
     {
         waitingForResponse = true;
         if (lastTimeout) clearTimeout(lastTimeout);
-        lastTimeout = setTimeout(tick, Interval);
+        lastTimeout = setTimeout(function ()
+        {
+            tick();
+            console.log("NoResponseTimeout")
+        }, Interval);
     };
 
     var stopWaitingForResponse = function ()
@@ -54,9 +58,39 @@ var MyBusController = function (callback)
         waitingForResponse = false;
     };
 
+    /**
+     * This object is responsible for creating delay between each bus activity.
+     * @type {{silenceTimeOnBuss: number, lastBussActive: number, transmissionDelayTimeoutId: number, transmissionTimeUpdate: Function, tickOnNextInterval: Function}}
+     */
+    var bs = {
+        silenceTimeOnBuss: MyBusConfig.SILENCE_TIME,
+        lastBussActive: 0,
+        transmissionDelayTimeoutId: 0,
+
+        /**
+         * Must be called right next to each bus activity.
+         */
+        transmissionTimeUpdate: function ()
+        {
+            this.lastBussActive = (new Date).getTime();
+            //console.log('transmissionTimeUpdate', this.lastBussActive);
+        },
+
+        /**
+         * It is should be called instead of tick()
+         */
+        tickOnNextInterval: function ()
+        {
+            if (this.transmissionDelayTimeoutId) clearTimeout(this.transmissionDelayTimeoutId);
+            var t = (new Date).getTime();
+            var i = ( t - this.lastBussActive >= this.silenceTimeOnBuss ? 0 : this.silenceTimeOnBuss - (t - this.lastBussActive));
+            this.transmissionDelayTimeoutId = setTimeout(tick, i);
+            //console.log('tickOnNextInterval', i);
+        }
+    };
+
     var tick = function ()
     {
-
 
         if (ToSend.length)
         {
@@ -65,10 +99,14 @@ var MyBusController = function (callback)
             {
                 if (MessageFilter.canSendMessage(ToSend.first().msg.address))
                 {
-                    //waitingForResponse = true;
-                    startWaitingForResponse();
+                    waitingForResponse = true;
 
-                    myBus.write(ToSend.first().msg);
+                    myBus.write(ToSend.first().msg, function ()
+                    {
+                        bs.transmissionTimeUpdate();
+                        startWaitingForResponse();
+
+                    });
 
                     if (TTL - 1 > ToSend.first().ttl) console.log('RETRANSMIT !! ' + ToSend.first().msg.address);
 
@@ -77,7 +115,7 @@ var MyBusController = function (callback)
                 {
                     console.log('Fail to send because address is disconnected', ToSend[0].msg);
                     ToSend.shift().callback('Fail to send because address is disconnected');
-                    tick();
+                    bs.tickOnNextInterval();//tick();
                 }
             }
             else
@@ -86,7 +124,7 @@ var MyBusController = function (callback)
                 MessageFilter.setAsDisconnected(ToSend[0].msg.address, 1000 * 60 /*1 min*/);
                 console.log('Fail to send', ToSend[0].msg);
                 ToSend.shift().callback("Fail to send", null);
-                tick();
+                bs.tickOnNextInterval();//tick();
             }
         }
         //else emptyTick = true;                  // it can provide errors because sometimes no interval between requests
@@ -95,7 +133,8 @@ var MyBusController = function (callback)
     var onConnectionOpen = function ()
     {
         connectionOpened = true;
-        tick();
+        bs.transmissionTimeUpdate();
+        bs.tickOnNextInterval();//tick();
         if (callback) callback(_this);
     };
 
@@ -105,15 +144,17 @@ var MyBusController = function (callback)
     var onMessageCome = function (msg)
     {
         //console.log(msg);
-
+        bs.transmissionTimeUpdate();
         if (ToSend.length)
         {
             var first = ToSend.first();
             MessageFilter.setAsConnected(first.msg.address);
             ToSend.shift().callback(msg.command == first.msg.command ? null : "Command received is not equal to sent", msg);
             stopWaitingForResponse();
-            tick();
-        }else{
+            bs.tickOnNextInterval();//tick();
+        }
+        else
+        {
             console.log('Iam not waiting for msg but i received:', msg);
         }
     };
@@ -127,7 +168,7 @@ var MyBusController = function (callback)
     this.send = function (msg, callback)
     {
         ToSend.push({msg: msg, callback: callback, ttl: TTL});
-        if (connectionOpened && !waitingForResponse) tick();
+        if (connectionOpened && !waitingForResponse)  bs.tickOnNextInterval();//tick();
     }
 
 };
