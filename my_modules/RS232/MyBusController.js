@@ -47,8 +47,8 @@ var MyBusController = function (callback)
         if (lastTimeout) clearTimeout(lastTimeout);
         lastTimeout = setTimeout(function ()
         {
+            console.log("NoResponseTimeout");
             tick();
-            console.log("NoResponseTimeout")
         }, Interval);
     };
 
@@ -101,12 +101,19 @@ var MyBusController = function (callback)
                 {
                     waitingForResponse = true;
 
+
+
                     myBus.write(ToSend.first().msg, function ()
                     {
-                        bs.transmissionTimeUpdate();
-                        startWaitingForResponse();
+                        //bs.transmissionTimeUpdate();
+                        //startWaitingForResponse();
 
                     });
+
+                    // --- moved here for test if it help avoid connection problem
+
+                    bs.transmissionTimeUpdate();
+                    startWaitingForResponse();
 
                     if (TTL - 1 > ToSend.first().ttl) console.log('RETRANSMIT !! ' + ToSend.first().msg.address);
 
