@@ -46,7 +46,7 @@ var dailyHistory = function (dir)
         }
 
 
-    }
+    };
     var util = day;
 
     // ===============================================================
@@ -60,12 +60,12 @@ var dailyHistory = function (dir)
         var now = new Date();
         if (!util.isTheSame(now))
         {
-            console.log('change');
+            //console.log('change');
             date = now;
             currentFile = util.toFileName(date);
             h = new historyFsStorage(dir + '' + currentFile);
         }
-    }
+    };
 
     /**
      * @param {string} line
@@ -144,7 +144,7 @@ var dailyHistory = function (dir)
         {
             acc.push({fileName: e, date: util.toDate(e)});
             return acc;
-        }, new Array()).sort(function (a, b)
+        }, []).sort(function (a, b)
         {
             return b.date - a.date;
         });
