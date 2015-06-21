@@ -19,7 +19,7 @@
     "passport-local": "~1.0.0",
     "html": "~0.0.7",
     "serialport": "~1.4.9",
-    "sqlite3": "~3.0.4",
+
     "diskspace": "~0.1.7",
     "crypto": "~0.0.3",
     "connect-flash": "0.1.1"
