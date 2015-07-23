@@ -3,7 +3,10 @@
  */
 var cfg = require('./../../config/PeopleSensorConfig');
 
-
+/**
+ *
+ * @constructor
+ */
 var SensorScanner = function ()
 {
 
@@ -67,10 +70,7 @@ var SensorScanner = function ()
 };
 
 
-/**
- *
- * @type {SensorScanner}
- */
+
 var singleton = new SensorScanner();
 
 module.exports = singleton;

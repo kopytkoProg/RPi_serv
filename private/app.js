@@ -10,7 +10,7 @@ myModule.config(function ($routeProvider)
     $routeProvider.
         when('/actual-temp.html', {
             templateUrl: 'actual-temp.html',
-            controller: 'myController'
+            controller: 'actualTempController'
         }).
         when('/temp-history.html', {
             templateUrl: 'temp-history.html',

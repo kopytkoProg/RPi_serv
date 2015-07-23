@@ -1,4 +1,4 @@
-myModule.controller('myController',
+myModule.controller('actualTempController',
     /**
      * @param $scope
      * @param $http

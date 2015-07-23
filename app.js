@@ -10,7 +10,44 @@ var router = express.Router();
 var flash = require('connect-flash');
 var LocalStrategy = require('passport-local').Strategy;
 var Users = require('./Users');
+var RPi1WireTemp = require('./my_modules/rpi_1wire_device/rpi_1wire_temp');
 
+/**
+ * Responsible for creating temp history from all temp sensors
+ */
+var tempHistory = require('./my_modules/temp_history/tempHistory');
+
+
+/**
+ * Used in esp project
+ */
+var MyConsole = require("./esp_utils/my_console");
+MyConsole.setAllowedModuleList(
+    [
+        'KeepAlive-',
+        'TcpMyBus-',
+        'AutoReconnect-',
+        'PackerReassembler',
+        'EspDevice',
+        'SpecialMsgHandler',
+        'EspTempSensorDeviceDevice'
+    ],
+    [
+        'KeepAlive',
+        'TcpMyBus',
+        'AutoReconnect',
+        'PackerReassembler',
+        'EspDevice',
+        'SpecialMsgHandler',
+        'EspTempSensorDeviceDevice'
+    ]
+);
+
+/**
+ * It contain all esp devices config
+ * @type {EspDevices|exports|module.exports}
+ */
+var espDevices = require('./my_modules/esp_device/esp_devices');
 
 var app = express();
 
