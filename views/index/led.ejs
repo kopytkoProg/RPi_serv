@@ -1,0 +1,22 @@
+<script type="text/ng-template" id="led.html">
+    <h3>LED <i class="fa fa-refresh fa-spin" ng-show="InProgress"></i></h3>
+
+    <div>
+
+
+        <button style="font-size: 2em" class="btn btn-default" ng-click="Leds.LED0=!Leds.LED0; sendNewLedStatus()">
+            <span>LED 0</span>
+            <i style="font-size: 2em; vertical-align: middle;" class="fa fa-lightbulb-o"
+               ng-class="{lightOn: Leds.LED0}"></i>
+        </button>
+
+        <button style="font-size: 2em" class="btn btn-default" ng-click="Leds.LED1=!Leds.LED1; sendNewLedStatus()">
+            <span>LED 1</span>
+            <i style="font-size: 2em; vertical-align: middle;" class="fa fa-lightbulb-o"
+               ng-class="{lightOn: Leds.LED1}"></i>
+        </button>
+
+
+    </div>
+
+</script>

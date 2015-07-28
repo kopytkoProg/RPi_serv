@@ -32,7 +32,10 @@ myModule.config(function ($routeProvider)
             templateUrl: 'move-sensors-history.html',
             controller: 'moveSensorsHistoryController'
         }).
-
+        when('/esp-devices-diagnostic.html', {
+            templateUrl: 'esp-devices-diagnostic.html',
+            controller: 'espDevicesDiagnosticController'
+        }).
         otherwise({
             redirectTo: '/actual-temp.html'
         });

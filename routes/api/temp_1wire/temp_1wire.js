@@ -23,6 +23,7 @@ router.get('/list', function (req, res) // list of connected sensors
     //})
     // ============================================
     res.writeHead(200, {'Content-Type': 'text/json'});
+    /**  @type {{list: id[]}} */
     var obj = {list:[]};
 
     logicalDevices.logicalTempSensors.forEach(function(e){
@@ -43,7 +44,9 @@ router.get('/temp', function (req, res)
     //})
     // ============================================
     res.writeHead(200, {'Content-Type': 'text/json'});
+    /**  @type {{temp: LogicalTempSensorAbstract~tempAndDescription[]}} */
     var obj = {temp:[]};
+
     logical_devices_temp.getAllTemps(function(err, temps){
         obj.temp = temps;
         res.end(JSON.stringify(obj), 'utf8');
@@ -55,7 +58,9 @@ router.get('/temp', function (req, res)
 router.get('/history/list', function (req, res)
 {
     res.writeHead(200, {'Content-Type': 'text/json'});
+    /** @type {Array.<NameAndData>} */
     var obj = tempHistory.h.listOfSavedHistory();
+
     res.end(JSON.stringify(obj), 'utf8');
 });
 

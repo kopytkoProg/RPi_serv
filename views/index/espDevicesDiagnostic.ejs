@@ -1,0 +1,19 @@
+<script type="text/ng-template" id="esp-devices-diagnostic.html">
+    <h3>Esp devices</h3>
+    <table class="table">
+        <tr>
+            <th>Address</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Last activity</th>
+            <th></th>
+        </tr>
+        <tr ng-repeat="i in list">
+            <td class="col-xs-3">{{i.ip}}:{{i.port}}</td>
+            <td class="col-xs-3">{{i.name}}</td>
+            <td class="col-xs-3">{{i.description}}</td>
+            <td class="col-xs-3">{{i.lastActivity}}</td>
+
+        </tr>
+    </table>
+</script>

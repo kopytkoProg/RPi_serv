@@ -16,6 +16,7 @@ var EventEmitter = require('events').EventEmitter;
 /**
  * @augments TcpMyBus
  * @param {EspDevice~cfg} cfg
+ * @property {EspDevice~cfg} cfg
  * @class
 
  */

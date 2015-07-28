@@ -45,7 +45,6 @@ MyConsole.setAllowedModuleList(
 
 /**
  * It contain all esp devices config
- * @type {EspDevices|exports|module.exports}
  */
 var espDevices = require('./my_modules/esp_device/esp_devices');
 
@@ -123,7 +122,7 @@ var isAuthenticated = require('./isAuthenticated');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/login', require('./routes/login'));
 
-
+app.use('/api/esp_devices', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/esp_devices/esp_devices'));
 app.use('/api/devices', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/devices/devices'));
 app.use('/api/temp_1wire', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/temp_1wire/temp_1wire'));
 app.use('/api/test', isAuthenticated.sendUnauthorizedIfUnauthenticated, require('./routes/api/test'));
@@ -157,10 +156,10 @@ if (app.get('env') === 'development')
     {
         res.status(err.status || 500);
         throw (err);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+        //res.render('error', {
+        //    message: err.message,
+        //    error: err
+        //});
     });
 }
 

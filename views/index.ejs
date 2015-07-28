@@ -38,6 +38,7 @@
     <script type="text/javascript" src="/t/ledController.js"></script>
     <script type="text/javascript" src="/t/deviceDiagnosticController.js"></script>
     <script type="text/javascript" src="/t/moveSensorsHistoryController.js"></script>
+    <script type="text/javascript" src="/t/espDevicesDiagnosticController.js"></script>
 
 
     <!--<script type="text/javascript" src="/t/plotDirective.js"></script>-->
@@ -152,6 +153,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li active-link="active"><a href="#/led.html">Led</a></li>
                         <li active-link="active"><a href="#/device-diagnostic.html">Device diagnostic</a></li>
+                        <li active-link="active"><a href="#/esp-devices-diagnostic.html">ESP device diagnostic</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -226,139 +228,11 @@
 </body>
 </html>
 
-
-<script type="text/ng-template" id="move-sensors-history.html">
-
-
-    <div style="position: relative; overflow: hidden">
-        <div style=" margin: 20px 0 10px 0">
-            <select class="form-control" style="float: right; width:auto; margin:10px 0px 10px 10px;"
-                    ng-model="selectedHistory" ng-options="h.text for h in listsOfHistories"
-                    ng-change="getData()">
-            </select>
-        </div>
-    </div>
-    <div id="plots"></div>
-</script>
-
-<script type="text/ng-template" id="device-diagnostic.html">
-    <h3>Device diagnostic</h3>
-
-    <table class="table">
-        <tr>
-            <th>Address</th>
-            <th>Id</th>
-            <th>Instance info</th>
-            <th>Last fail</th>
-            <th>Last success</th>
-            <th>Next probe interval</th>
-            <th></th>
-        </tr>
-        <tr ng-repeat="i in filterList"
-            ng-class="{'bg-danger': (i.lastFail > i.lastSuccess), 'bg-success': (i.lastFail <= i.lastSuccess)}">
-            <td class="col-xs-1">{{i.address}}</td>
-            <td class="col-xs-1">{{i.id}}</td>
-            <td class="col-xs-2">{{i.instanceInfo}}</td>
-            <td class="col-xs-2">{{i.lastFail}}</td>
-            <td class="col-xs-2">{{i.lastSuccess}}</td>
-            <td class="col-xs-2">{{i.nextProbeInterval}}</td>
-            <td class="col-xs-2">
-                <button ng-click="test(i.address)">Test: {{i.address}}</button>
-            </td>
-        </tr>
-    </table>
-</script>
-
-<script type="text/ng-template" id="led.html">
-    <h3>LED <i class="fa fa-refresh fa-spin" ng-show="InProgress"></i></h3>
-
-    <div>
-
-
-        <button style="font-size: 2em" class="btn btn-default" ng-click="Leds.LED0=!Leds.LED0; sendNewLedStatus()">
-            <span>LED 0</span>
-            <i style="font-size: 2em; vertical-align: middle;" class="fa fa-lightbulb-o"
-               ng-class="{lightOn: Leds.LED0}"></i>
-        </button>
-
-        <button style="font-size: 2em" class="btn btn-default" ng-click="Leds.LED1=!Leds.LED1; sendNewLedStatus()">
-            <span>LED 1</span>
-            <i style="font-size: 2em; vertical-align: middle;" class="fa fa-lightbulb-o"
-               ng-class="{lightOn: Leds.LED1}"></i>
-        </button>
-
-
-    </div>
-
-</script>
-
-<script type="text/ng-template" id="actual-temp.html">
-    <h3>Temps</h3>
-    <ul>
-        <div ng-repeat="t in temps" class="row" style="display: flex; align-items: baseline;">
-            <div class="col-xs-5">
-                <span class="displa" style="font-size: 1.5em">{{t.name}}</span>
-                <!--<span class="text-muted">({{t.id}})</span>-->
-            </div>
-            <div class="col-xs-2"><span class="text-danger" ng-hide="t.crcCorrect">CRC ERROR</span></div>
-            <div class="col-xs-5" style="text-align: right">
-                <span class="displa" style="font-size: 2em">{{t.temp.toFixed(1)}} C</span>
-            </div>
-        </div>
-    </ul>
-</script>
-
-<script type="text/ng-template" id="temp-history.html">
-
-    <div style="position: relative; overflow: hidden">
-        <div style=" margin: 20px 0 10px 0">
-            <select class="form-control" style="float: right; width:auto; margin:10px 0px 10px 10px;"
-                    ng-model="selectedHistory" ng-options="h.text for h in listsOfHistories"
-                    ng-change="loadData()">
-            </select>
-        </div>
-    </div>
-    <div id="plot" style="width: 100%; height: 400px;"></div>
-
-</script>
-
-<script type="text/ng-template" id="temp-compare-history.html">
-
-
-    <div style="position: relative; overflow: hidden">
-        <div class="row">
-
-            <form class="form-horizontal" role="form">
-                <div class="col-xs-6">
-                    <div class="form-group">
-                        <label class="col-sm-1 control-label" style="font-size: 1.0em"><strong>A</strong></label>
-
-                        <div class="col-sm-11">
-                            <select class="form-control" ng-model="SelectedA" ng-options="h.text for h in ListA"
-                                    ng-change="loadData()">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xs-6">
-                    <div class="form-group">
-                        <label class="col-sm-1 control-label" style="font-size: 1.0em"><strong>B</strong></label>
-
-                        <div class="col-sm-11">
-                            <select class="form-control col-xs-6" ng-model="SelectedB"
-                                    ng-options="h.text for h in ListB"
-                                    ng-change="loadData()">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-        <hr/>
-        <div id="plot" style="width: 100%; height: 400px; "></div>
-    </div>
-
-
-</script>
+<!-- Views -->
+<%- include index/espDevicesDiagnostic.ejs %>
+<%- include index/movmentSensorHistory.ejs %>
+<%- include index/deviceDiagnostic.ejs %>
+<%- include index/led.ejs %>
+<%- include index/actualTemp.ejs %>
+<%- include index/tempHistory.ejs %>
+<%- include index/tempCompareHistory.ejs %>

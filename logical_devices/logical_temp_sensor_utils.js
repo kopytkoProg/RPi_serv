@@ -12,7 +12,9 @@ var LogicalTempSensorUtils = {
      * @param {LogicalTempSensorUtils~onTemps} callback
      */
     getAllTemps: function (callback) {
+        /** @type {LogicalTempSensorAbstract~tempAndDescription[]} */
         var r = [];
+
         var c = 0;
 
 
@@ -35,5 +37,5 @@ module.exports = LogicalTempSensorUtils;
 /**
  * @callback LogicalTempSensorUtils~onTemps
  * @param err
- * @param temps
+ * @param {LogicalTempSensorAbstract~tempAndDescription[]} temps
  */

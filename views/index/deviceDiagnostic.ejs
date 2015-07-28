@@ -1,0 +1,27 @@
+<script type="text/ng-template" id="device-diagnostic.html">
+    <h3>Device diagnostic</h3>
+
+    <table class="table">
+        <tr>
+            <th>Address</th>
+            <th>Id</th>
+            <th>Instance info</th>
+            <th>Last fail</th>
+            <th>Last success</th>
+            <th>Next probe interval</th>
+            <th></th>
+        </tr>
+        <tr ng-repeat="i in filterList"
+            ng-class="{'bg-danger': (i.lastFail > i.lastSuccess), 'bg-success': (i.lastFail <= i.lastSuccess)}">
+            <td class="col-xs-1">{{i.address}}</td>
+            <td class="col-xs-1">{{i.id}}</td>
+            <td class="col-xs-2">{{i.instanceInfo}}</td>
+            <td class="col-xs-2">{{i.lastFail}}</td>
+            <td class="col-xs-2">{{i.lastSuccess}}</td>
+            <td class="col-xs-2">{{i.nextProbeInterval}}</td>
+            <td class="col-xs-2">
+                <button ng-click="test(i.address)">Test: {{i.address}}</button>
+            </td>
+        </tr>
+    </table>
+</script>

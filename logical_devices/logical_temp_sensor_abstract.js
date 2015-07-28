@@ -35,7 +35,8 @@ LogicalTempSensorAbstract.prototype.getTemp = function (callback) {
 
 /**
  *
- * @param @param {function(*=, number=)} callback
+ * @param {function(*=, LogicalTempSensorAbstract~tempAndDescription=)} callback
+ * @return
  */
 
 LogicalTempSensorAbstract.prototype.getTempAndDescription = function (callback) {
@@ -50,7 +51,8 @@ LogicalTempSensorAbstract.prototype.getTempAndDescription = function (callback) 
                 temp: temp,
                 date: new Date(),
                 name: descObj.name,
-                crcCorrect: true
+                crcCorrect: true,
+                description: descObj.description
             });
 
 
@@ -59,3 +61,15 @@ LogicalTempSensorAbstract.prototype.getTempAndDescription = function (callback) 
 
 
 module.exports = LogicalTempSensorAbstract;
+
+/**
+ * Description object
+ * @typedef {object}  LogicalTempSensorAbstract~tempAndDescription
+ * @property {string} id
+ * @property {string} innerId
+ * @property {number} temp
+ * @property {Date} date
+ * @property {string} name
+ * @property {string} description
+ * @property {boolean} crcCorrect
+ */

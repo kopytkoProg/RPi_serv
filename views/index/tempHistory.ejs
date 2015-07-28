@@ -1,0 +1,14 @@
+
+<script type="text/ng-template" id="temp-history.html">
+
+    <div style="position: relative; overflow: hidden">
+        <div style=" margin: 20px 0 10px 0">
+            <select class="form-control" style="float: right; width:auto; margin:10px 0px 10px 10px;"
+                    ng-model="selectedHistory" ng-options="h.text for h in listsOfHistories"
+                    ng-change="loadData()">
+            </select>
+        </div>
+    </div>
+    <div id="plot" style="width: 100%; height: 400px;"></div>
+
+</script>
