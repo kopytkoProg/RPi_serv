@@ -43,32 +43,62 @@ LogicalTempSensorAbstract.prototype.getTempAndDescription = function (callback) 
     var t = this;
     this.getTemp(function (err, temp) {
         if (err) return callback(err, null);
-        var descObj = DS18B20.DescriptionFor(t.getId());
-        callback(null,
-            {
-                id: descObj.id,
-                innerId: descObj.innerId,
-                temp: temp,
-                date: new Date(),
-                name: descObj.name,
-                crcCorrect: true,
-                description: descObj.description
-            });
+
+        /** @type {LogicalTempSensorAbstract~tempAndDescription} */
+        var desc = t.getDescription();
+        desc.temp = temp;
+        desc.date = new Date();
+        callback(null, desc);
+        //var descObj = DS18B20.DescriptionFor(t.getId());
+        //callback(null,
+        //    {
+        //        id: descObj.id,
+        //        innerId: descObj.innerId,
+        //        temp: temp,
+        //        date: new Date(),
+        //        name: descObj.name,
+        //        crcCorrect: true,
+        //        description: descObj.description
+        //    });
 
 
     })
 };
 
+/**
+ * @return LogicalTempSensorAbstract~Description
+ */
+
+LogicalTempSensorAbstract.prototype.getDescription = function () {
+    var t = this;
+    var descObj = DS18B20.DescriptionFor(t.getId());
+
+    return {
+        id: descObj.id,
+        innerId: descObj.innerId,
+        date: new Date(),
+        name: descObj.name,
+        crcCorrect: true,
+        description: descObj.description
+    };
+
+
+};
 
 module.exports = LogicalTempSensorAbstract;
 
 /**
- * Description object
  * @typedef {object}  LogicalTempSensorAbstract~tempAndDescription
- * @property {string} id
- * @property {string} innerId
+ * @augments LogicalTempSensorAbstract~Description
  * @property {number} temp
  * @property {Date} date
+
+ */
+
+/**
+ * @typedef {object}  LogicalTempSensorAbstract~Description
+ * @property {string} id
+ * @property {string} innerId
  * @property {string} name
  * @property {string} description
  * @property {boolean} crcCorrect

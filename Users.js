@@ -24,8 +24,7 @@ var crypto = require('crypto');
 //database.close();
 
 
-var Users = function ()
-{
+var Users = function () {
     // var db = new sqlite3.Database('mydb.db');
 
 
@@ -36,28 +35,23 @@ var Users = function ()
         }
     ];
 
-    function hash(txt)
-    {
+    function hash(txt) {
         var sha256 = crypto.createHash('sha256');
         return sha256.update(txt).digest('hex');
     }
 
-    this.findOneUser = function (login, password, callback)
-    {
-        var f = function(users)
-        {
-            var filtered = users.filter(function (e)
-            {
+    this.findOneUser = function (login, password, callback) {
+        var f = function (users) {
+            var filtered = users.filter(function (e) {
                 return e.Username == login && e.Password == hash(password);
             });
 
-            if (filtered.length > 0)
-            {
-                delete filtered[0].Password;
-                callback(filtered[0]);
+            if (filtered.length > 0) {
+
+
+                callback({Username: filtered.Username});
             }
-            else
-            {
+            else {
                 callback(null);
             }
         };
