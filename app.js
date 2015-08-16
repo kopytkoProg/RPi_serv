@@ -25,8 +25,8 @@ var MyConsole = require("./esp_utils/my_console");
 MyConsole.setAllowedModuleList(
     [
         'KeepAlive-',
-        'TcpMyBus-',
-        'AutoReconnect-',
+        'TcpMyBus',
+        'AutoReconnect',
         'PackerReassembler',
         'EspDevice',
         'SpecialMsgHandler',

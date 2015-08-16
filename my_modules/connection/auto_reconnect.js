@@ -36,7 +36,9 @@ var AutoReconnect = function (host, port, onConnect, onData, onDisconnect, onRec
     var waitingForDisconnectTimeout = new Timeout(function () {
         cons.error('Disconnect Forced');
         t.connction.destroy();
-        //t.connction.destroy();
+        // fix
+        connectionStatus = CONNECTION_STATES.Disconnected;
+
     }, CONNECTION_DISCONNECTING_TIMEOUT);
 
     var timeout = new Timeout(function () {
