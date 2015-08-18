@@ -23,9 +23,8 @@ MyConsole.setAllowedModuleList(
 );
 
 
-var my_tcp_bus = require("././my_tcp_bus");
-var KeepAlive = require("././keep_alive");
-var esp_temp_sensors_device = require("././esp_temp_sensors_device");
+var esp_temp_sensors_device = require("./../my_modules/esp_device/esp_temp_sensors_device");
+var my_tcp_bus = require("./../my_modules/my_tcp_bus/tcp_my_bus");
 
 var con = MyConsole.get('Test');
 var ld = require('./../logical_devices/logical_devices');
@@ -39,28 +38,28 @@ var succ = 0;
 var sent = 0;
 
 
-//var bus = new my_tcp_bus('192.168.1.170', 300);
+var bus = new my_tcp_bus('192.168.1.170', 300);
 //new KeepAlive(bus);
 
-var bus = new esp_temp_sensors_device({ip: '192.168.1.170', port: 300});
-bus.initEspTempSensorsDevice();
+//var bus = new esp_temp_sensors_device({ip: '192.168.1.170', port: 300});
+
 
 //bus.send(bus.SPECIAL_COMMANDS.scanNetwork);
-bus.send(bus.AVR_COMMANDS.helloAvr, function (err, m) {
+bus.send(msg , function (err, m) {
     con.log('Response form avr: ' + m);
 });
 
-
-setTimeout(function () {
-    ld.logicalTempSensors.forEach(function (e) {
-        e.getTemp(function (err, temp) {
-            if (err) return con.log(err);
-            con.log(e.getId() + ' ' + temp);
-        });
-    });
-
-}, 1000);
-
+//
+//setTimeout(function () {
+//    ld.logicalTempSensors.forEach(function (e) {
+//        e.getTemp(function (err, temp) {
+//            if (err) return con.log(err);
+//            con.log(e.getId() + ' ' + temp);
+//        });
+//    });
+//
+//}, 1000);
+//
 
 //var onReceive = function (err, m) {
 //    con.log('TMP: \r\n', m);

@@ -24,7 +24,7 @@ var EspDevice = function (cfg) {
     // call super constructor
     EspDevice.super_.call(this, cfg.ip, cfg.port);
     // create keep alive
-    new KeepAlive(this);
+    // new KeepAlive(this);
 
     this.cfg = cfg;
     // this.asyncEventEmitter = new EventEmitter();
