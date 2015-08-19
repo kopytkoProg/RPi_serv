@@ -30,7 +30,7 @@ var DS18B20D = {
             description: 'Czujnik temperatury umieszczony na dworze (1 pietro, Południowa strona)'
         },
         {
-            id: 'unassigned',
+            id: 'unassigned_1',
             //===========================================================================
             innerId: 'michalsRoomFree1',
             name: 'Na fotelu',
@@ -46,14 +46,14 @@ var DS18B20D = {
             description: 'Czujnik temperatury umieszczony na róże wyjsciowej z pieca'
         },
         {
-            id: '28:ff:5c:79:62:14:03:18',
+            id: 'unassigned_2',
             //===========================================================================
             innerId: 'boilerRoomHeatingInstallation-in',
             name: 'Woda do pieca',
             description: 'Czujnik temperatury umieszczony na róże wejściowej z pieca'
         },
         {
-            id: '10:ef:a0:6f:01:08:00:12',
+            id: '28:ff:5c:79:62:14:03:18',
             //===========================================================================
             innerId: 'boilerRoom-waterInBoiler',
             name: 'Woda w bojlerze',

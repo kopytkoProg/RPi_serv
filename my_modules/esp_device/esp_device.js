@@ -29,8 +29,10 @@ var EspDevice = function (cfg) {
     this.cfg = cfg;
     // this.asyncEventEmitter = new EventEmitter();
     con.log('Created device for cfg:', cfg);
-
-    new SpecialMsgHandler(this);
+    /**
+     * @type {SpecialMsgHandler}
+     */
+    this.specialMsgHandler = new SpecialMsgHandler(this);
 };
 util.inherits(EspDevice, my_tcp_bus);
 

@@ -16,8 +16,11 @@ var ASYNC_ACTIONS = {
  * @constructor
  */
 var SpecialMsgHandler = function (esp_device) {
-    this.info = {};
-    this.info.wifi = {};
+    /**
+     * @type {{wifi: {auth: *, dBm: *, mac: *, chanel: *, quality: *}[]}}
+     */
+    this.info = {wifi:{}};
+    //this.info.wifi = {};
     this.esp_device = esp_device;
     var t = this;
     this.esp_device.on(ASYNC_ACTIONS.WIFI_INFO, function(msg){t.wifiInfo.call(t, msg)});
@@ -61,6 +64,7 @@ SpecialMsgHandler.prototype.wifiInfo = function (msg) {
     var m = r.exec(msg.content);
 
     var auth = m[1], ssid = m[2], dBm = m[3], mac = m[4], chanel = m[5];
+
     this.info.wifi[ssid] = {
         auth: auth,
         dBm: dBm,

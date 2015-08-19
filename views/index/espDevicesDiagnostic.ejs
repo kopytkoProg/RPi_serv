@@ -6,14 +6,26 @@
             <th>Name</th>
             <th>Description</th>
             <th>Last activity</th>
-            <th></th>
+            <th colspan="2">Wifi</th>
         </tr>
-        <tr ng-repeat="i in list">
+        <tbody ng-repeat="i in list">
+        <tr>
             <td class="col-xs-3">{{i.ip}}:{{i.port}}</td>
             <td class="col-xs-3">{{i.name}}</td>
             <td class="col-xs-3">{{i.description}}</td>
             <td class="col-xs-3">{{i.lastActivity}}</td>
-
+            <td>
+                <button class="btn" ng-click="scanWifi(i)" id ="scan">Scan</button>
+            </td>
+            <td>
+                <button class="btn" ng-click="getWifi(i)">Get</button>
+            </td>
         </tr>
+        <tr>
+            <td colspan="6">
+               <pre>{{i.wifi}}</pre>
+            </td>
+        </tr>
+        </tbody>
     </table>
 </script>

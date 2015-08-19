@@ -35,6 +35,7 @@ LogicalTempSensorEsp.prototype.getId = function () {
 
 /**
  * @param {function(*=, number=)} callback
+ * @override
  */
 LogicalTempSensorEsp.prototype.getTemp = function (callback) {
     this.esp.getSensorTemp(this.id, callback);

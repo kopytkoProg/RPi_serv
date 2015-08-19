@@ -12,6 +12,7 @@ var EspDevices = [
     {
         description: 'Temp sensor device in boiler room',
         name: 'Boiler room',
+        id: 'boiler_room_1',
         dev: new esp_temp_sensors_device({
             ip: '192.168.1.170',
             port: 300,
@@ -28,5 +29,6 @@ module.exports = EspDevices;
  * @typedef {Object} EspDevices~deviceAndDescription
  * @property {string} description
  * @property {string} name
+ * @property {string} id
  * @property {EspDevice} dev
  */
