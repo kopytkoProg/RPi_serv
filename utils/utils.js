@@ -22,7 +22,6 @@ var Utils = {
 };
 
 
-
 Object.defineProperty(Array.prototype, "findFirst", {
     enumerable: false,
     writable: true
@@ -35,12 +34,21 @@ Object.defineProperty(Array.prototype, "findFirst", {
  */
 Array.prototype.findFirst = function (callback) {
     return this.filter(
-    function (e, i, arr) {
-        return callback(e, i, arr);
-    })[0];
+        function (e, i, arr) {
+            return callback(e, i, arr);
+        })[0];
 };
 
-for (var x in [1,2]){
-    console.log (x);
-}
+/**
+ @param {T} self
+ @return {function( ...*)}
+ @template T
+ */
+Function.prototype.callAs = function (self) {
+    var f = this;
+    return function () {
+        return f.apply(self, arguments);
+    }
+};
+
 module.exports = Utils;

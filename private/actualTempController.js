@@ -11,14 +11,15 @@ myModule.controller('actualTempController',
 
 
         var getAllSensors = function () {
-            $http.get('/api/temp_1wire/list').
+            $http.get('/api/temp_1wire/sensors/descriptions/enabled').
                 success(function (data, status, headers, config) {
 
-                    data.list.forEach(function (d) {
+                    data.forEach(function (d) {
                         d.temp = null;
+                        d.crcCorrect = true;
                     });
 
-                    $scope.tempSensorList = data.list;
+                    $scope.tempSensorList = data;
 
                     loadData();
                 }).
@@ -40,7 +41,8 @@ myModule.controller('actualTempController',
                         data.temp.forEach(function (t) {
                             if (d.innerId == t.innerId) {
                                 d.temp = t.temp;
-
+                                d.date = t.date;
+                                d.crcCorrect = t.crcCorrect;
                             }
                         })
                     });

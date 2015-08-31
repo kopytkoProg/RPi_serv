@@ -22,7 +22,7 @@ router.get('/list', function (req, res) // list of connected sensors
     //})
     // ============================================
     res.writeHead(200, {'Content-Type': 'text/json'});
-    /**  @type {{list:LogicalTempSensorAbstract~Description[]}} */
+    /**  @type {{list:DS18B20DDescriptionObject[]}} */
     var obj = {list: []};
 
     logicalDevices.logicalTempSensors.forEach(function (e) {
@@ -72,9 +72,23 @@ router.get('/history/date/:date', function (req, res) {
 
 });
 
+router.get('/sensors/descriptions/enabled', function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/json'});
+    /**  @type {DS18B20DDescriptionObject[]} */
+    var obj = DS18B20.Descriptions.filter(function (e) {
+        return e.enabled
+    });
+
+    res.end(JSON.stringify(obj), 'utf8');
+});
+
 router.get('/sensors/descriptions', function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/json'});
-    res.end(JSON.stringify(DS18B20.Descriptions), 'utf8');
+    /**  @type {DS18B20DDescriptionObject[]} */
+    var obj = DS18B20.Descriptions;
+
+    res.end(JSON.stringify(obj), 'utf8');
 });
+
 
 module.exports = router;

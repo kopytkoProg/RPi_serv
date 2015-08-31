@@ -2,7 +2,10 @@
  * Created by michal on 2014-12-12.
  */
 
-
+/**
+ *
+ * @type {{Descriptions: DS18B20DDescriptionObject[], DescriptionFor: Function}}
+ */
 
 
 var DS18B20D = {
@@ -16,7 +19,7 @@ var DS18B20D = {
      */
     Descriptions: [
         {
-            id: '28-0000058f448c',
+            id: '28-0000058f448c', enabled: true,
             //===========================================================================
             innerId: 'michalsRoomCeilingCurtain',
             name: 'Pod sufitem',
@@ -24,7 +27,7 @@ var DS18B20D = {
             icon: 'fa fa-home'
         },
         {
-            id: '28-0000058f8de4',
+            id: '28-0000058f8de4', enabled: true,
             //===========================================================================
             innerId: 'firstFlorOutside1',
             name: 'Na dworze',
@@ -32,7 +35,7 @@ var DS18B20D = {
             icon: 'fa fa-cloud'
         },
         {
-            id: 'unassigned_1',
+            id: 'unassigned_1', enabled: false,
             //===========================================================================
             innerId: 'michalsRoomFree1',
             name: 'Na fotelu',
@@ -41,7 +44,7 @@ var DS18B20D = {
 
 
         {
-            id: '28:ff:da:60:62:14:03:e4',
+            id: '28:ff:da:60:62:14:03:e4', enabled: true,
             //===========================================================================
             innerId: 'boilerRoomHeatingInstallation-out',
             name: 'Woda z pieca',
@@ -49,14 +52,14 @@ var DS18B20D = {
             icon: 'fa fa-fire'
         },
         {
-            id: 'unassigned_2',
+            id: 'unassigned_2', enabled: false,
             //===========================================================================
             innerId: 'boilerRoomHeatingInstallation-in',
             name: 'Woda do pieca',
             description: 'Czujnik temperatury umieszczony na róże wejściowej z pieca'
         },
         {
-            id: '28:ff:5c:79:62:14:03:18',
+            id: '28:ff:5c:79:62:14:03:18', enabled: true,
             //===========================================================================
             innerId: 'boilerRoom-waterInBoiler',
             name: 'Woda w bojlerze',
@@ -81,7 +84,7 @@ var DS18B20D = {
         });
 
         return selected.length == 1 ? selected[0] : {
-            id: id,
+            id: id, active: true,
             //===========================================================================
             innerId: 'Unknown',
             name: 'Unknown',
@@ -100,6 +103,7 @@ module.exports = DS18B20D;
  * Description object
  * @typedef {Object} DS18B20DDescriptionObject
  * @property {string} id
+ * @property {boolean} enabled
  * @property {string} innerId
  * @property {string} name
  * @property {string} description

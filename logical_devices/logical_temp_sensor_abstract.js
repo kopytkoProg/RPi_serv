@@ -48,6 +48,7 @@ LogicalTempSensorAbstract.prototype.getTempAndDescription = function (callback) 
         var desc = t.getDescription();
         desc.temp = temp;
         desc.date = new Date();
+        desc.crcCorrect = true;
         callback(null, desc);
         //var descObj = DS18B20.DescriptionFor(t.getId());
         //callback(null,
@@ -66,41 +67,29 @@ LogicalTempSensorAbstract.prototype.getTempAndDescription = function (callback) 
 };
 
 /**
- * @return LogicalTempSensorAbstract~Description
+ * @return DS18B20DDescriptionObject
  */
 
 LogicalTempSensorAbstract.prototype.getDescription = function () {
     var t = this;
-    var descObj = DS18B20.DescriptionFor(t.getId());
-
-    return {
-        id: descObj.id,
-        innerId: descObj.innerId,
-        date: new Date(),
-        name: descObj.name,
-        crcCorrect: true,
-        description: descObj.description,
-        icon: descObj.icon
-    };
-
-
+    return DS18B20.DescriptionFor(t.getId());
 };
 
 module.exports = LogicalTempSensorAbstract;
 
 /**
  * @typedef {object}  LogicalTempSensorAbstract~tempAndDescription
- * @augments LogicalTempSensorAbstract~Description
+ * @augments DS18B20DDescriptionObject
  * @property {number} temp
  * @property {Date} date
-
- */
-
-/**
- * @typedef {object}  LogicalTempSensorAbstract~Description
- * @property {string} id
- * @property {string} innerId
- * @property {string} name
- * @property {string} description
  * @property {boolean} crcCorrect
  */
+
+///**
+// * @typedef {object}  LogicalTempSensorAbstract~Description
+// * @property {string} id
+// * @property {string} innerId
+// * @property {string} name
+// * @property {string} description
+//
+// */

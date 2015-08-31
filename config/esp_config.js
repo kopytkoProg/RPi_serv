@@ -4,7 +4,6 @@
 
 var EspConfig = {
 
-    // ========================== tcp_my_bus.js ==========================
     TcpMyBus: {
         /** Time between next send try */
         RESPONSE_TIMEOUT: 4 * 1000,
@@ -23,7 +22,14 @@ var EspConfig = {
     KeepAlive: {
         /** If no communication on esp device while this time then will be send keep alive msg */
         TIME: 2 * 1000
+    },
+    EspTempSensorsDevice: {
+        /** If any problem occur while initiation and initiation failed then wait this time and retry  */
+        TIME_TO_NEXT_INIT: 1000 * 60
     }
+
+
+
 };
 
 module.exports = EspConfig;

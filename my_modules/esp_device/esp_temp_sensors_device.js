@@ -7,9 +7,10 @@ var con = require('./../../esp_utils/my_console').get('EspTempSensorDeviceDevice
 var EspDevice = require('./esp_device');
 var EventEmitter = require('events').EventEmitter;
 var myUtils = require('./../../utils/utils');
+var config = require('./../../config/esp_config');
 var logicalDevices = require('./../../logical_devices/logical_devices');
 var LogicalTempSensor = require('./../../logical_devices/logical_temp_sensor_esp');
-
+var Q = require('q');
 
 /**
  * @augments EspDevice
@@ -27,16 +28,27 @@ var EspTempSensorsDevice = function (cfg) {
     this.AVR_COMMANDS.getTemp = 'get-temp-avr';
     /*---------------------------------------------------*/
     this.sensorsInfo = {lastUpdate: 0, sensors: []};
-    this.events = new EventEmitter();
+    this.myLogicalDevices = [];
+    //this.events = new EventEmitter();
 
 
-    this.initEspTempSensorsDevice();
+    this.initEspTempSensorsDevice()
+
 };
 util.inherits(EspTempSensorsDevice, EspDevice);
 
+/**
+ * @return {q} promis of get all ids
+ */
 EspTempSensorsDevice.prototype.getSensorsId = function () {
+    var deferred = Q.defer();
     this.send(this.AVR_COMMANDS.getSensorsId, function (err, msg) {
-        if (err) return con.error(err);
+
+        if (err) {
+            con.error(err);
+            deferred.reject(err);
+            return;
+        }
 
         /* 28:ff:da:60:62:14:03:e4, 28:ff:5c:79:62:14:03:18, 10:ef:a0:6f:01:08:00:12 */
         msg.split(', ').forEach(function (id) {
@@ -44,18 +56,35 @@ EspTempSensorsDevice.prototype.getSensorsId = function () {
         }, this);
 
         this.sensorsInfo.lastUpdate = new Date().getTime();
-        this.registerLogicalDevices();
-        this.events.emit('sensorsListReceived');
+        deferred.resolve(this.sensorsInfo.sensors);
+        //this.events.emit('sensorsListReceived');
         con.log('sensorsInfo: ', this.sensorsInfo);
 
     });
+    return deferred.promise;
 };
 
+/**
+ * Unregister logical devices
+ */
+EspTempSensorsDevice.prototype.unRegisterLogicalDevices = function () {
+
+    this.myLogicalDevices.forEach(function (ld) {
+        var index = logicalDevices.logicalTempSensors.indexOf(ld);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    });
+};
+/**
+ * Register logical devices
+ */
 EspTempSensorsDevice.prototype.registerLogicalDevices = function () {
 
     var sensors = myUtils.cloneArray(this.sensorsInfo.sensors);
     sensors.forEach(function (e) {
         var lts = new LogicalTempSensor(this, e);
+        this.myLogicalDevices.push(lts);
         logicalDevices.logicalTempSensors.push(lts);
     }, this);
 
@@ -97,9 +126,26 @@ EspTempSensorsDevice.prototype.getAllSensorTemp = function (callback) {
 };
 
 /**
+ *
+ * @return {Promise} promise of done
  */
 EspTempSensorsDevice.prototype.initEspTempSensorsDevice = function () {
-    this.getSensorsId();
+
+    var self = this;
+    /* Remove my devices from logicalDevices.logicalTempSensors */
+    this.unRegisterLogicalDevices();
+
+    /* Clear array of sensors ids and logical devices */
+    this.sensorsInfo.sensors = [];
+    this.myLogicalDevices = [];
+
+    /* Get new list of sensors */
+    this.getSensorsId()
+        .then(this.registerLogicalDevices.callAs(self) /* Register new temp sensors devices */)
+        .fail(function (err) {
+            con.error('Fail to init', err);
+            setTimeout(self.initEspTempSensorsDevice.callAs(self), config.EspTempSensorsDevice.TIME_TO_NEXT_INIT);
+        })
 };
 
 
