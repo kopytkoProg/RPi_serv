@@ -3,4 +3,4 @@
 - [x] move all param from esp files to global config
 - [x] move all utils to public space
 
-
+- [ ] provide rescan for each 5 min and for each 1 min if no connection with esp servHn

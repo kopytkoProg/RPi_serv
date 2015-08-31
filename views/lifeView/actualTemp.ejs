@@ -1,0 +1,26 @@
+<div ng-repeat="t in tempSensorList" class="tempItem"
+     title="{{t.description}}">
+
+
+    <!--<span class="text-muted">({{t.id}})</span>-->
+    <!--<span class="text-danger" ng-hide="t.crcCorrect">CRCE</span>-->
+
+
+    <div class="tem_div"><!--
+        --><i class="icon text-muted {{t.icon}}"></i><!--
+        --><span class="temp">{{ t.temp != null ? t.temp.toFixed(1) : '--'}}</span><!--
+        --><span class="unit text-muted">C</span><!--
+    --></div>
+
+    <!--<i class="fa fa-fire"></i>-->
+    <!--<i class="fa fa-cloud"></i>-->
+    <!--<i class="fa fa-home"></i>-->
+    <!--<i class="fa fa-sun-o"></i>-->
+
+
+    <div class="text-muted description">{{t.name}}</div>
+
+</div>
+
+
+

@@ -62,9 +62,10 @@ EspTempSensorsDevice.prototype.registerLogicalDevices = function () {
 };
 
 /**
- *
+ * Return temperature for given sensor
  * @param {string} id DS18x20 id
  * @param {EspTempSensorsDevice~onTmpResponse} callback
+ *
  */
 EspTempSensorsDevice.prototype.getSensorTemp = function (id, callback) {
     this.send(this.AVR_COMMANDS.getTemp + ':' + id, function (err, msg) {

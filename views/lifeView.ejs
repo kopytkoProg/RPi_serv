@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <title>RPi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="/Raspberry-Pi.png" type="image/png"/>
+    <script type="text/javascript" src="/js/jquery-2.1.1.js"></script>
+    <script type="text/javascript" src="/js/flot-0.8.3/flot/jquery.flot.js"></script>
+    <script type="text/javascript" src="/js/flot-0.8.3/flot/jquery.flot.time.js"></script>
+
+    <script type="text/javascript" src="/angular-1.3.4/angular.js"></script>
+    <script type="text/javascript" src="/angular-1.3.4/angular-route.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <!--<link rel="stylesheet" href="/css/bootstrap.min.css">-->
+    <!-- http://fortawesome.github.io -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <!--http://sciactive.com/pnotify/#demos-simple-->
+    <script type="text/javascript" src="/js/notify.min.js"></script>
+
+
+    <!-- Optional theme -->
+
+    <!--<link rel="stylesheet" href="css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="/css/bootstrap-theme-yeti.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/t/app.js"></script>
+    <script type="text/javascript">
+        myModule.run(function (AppConfig) {
+            AppConfig.Temp.Interval = 10 * 1000;
+        })
+    </script>
+    <script type="text/javascript" src="/t/actualTempController.js"></script>
+    <!--<script type="text/javascript" src="/t/osNavbarController.js"></script>-->
+    <!--<script type="text/javascript" src="/t/tempPlotController.js"></script>-->
+    <!--<script type="text/javascript" src="/t/linkNavbarController.js"></script>-->
+    <!--<script type="text/javascript" src="/t/tempComparePlotController.js"></script>-->
+    <!--<script type="text/javascript" src="/t/ledController.js"></script>-->
+    <!--<script type="text/javascript" src="/t/deviceDiagnosticController.js"></script>-->
+    <!--<script type="text/javascript" src="/t/moveSensorsHistoryController.js"></script>-->
+    <!--<script type="text/javascript" src="/t/espDevicesDiagnosticController.js"></script>-->
+
+
+    <!--<script type="text/javascript" src="/t/plotDirective.js"></script>-->
+
+
+    <script type="text/javascript">
+
+
+        $.notify.addStyle('happyblue', {
+            html: "<div>☺<span data-notify-text/>☺</div>",
+            classes: {
+                base: {
+                    "white-space": "nowrap",
+                    "background-color": "lightblue",
+                    "padding": "5px"
+                },
+                superblue: {
+                    "color": "white",
+                    "background-color": "blue"
+                },
+                error: {
+                    "color": "red",
+                    "background-color": "red"
+                }
+
+
+            }
+        });
+
+        $.notify.addStyle('myError', {
+            html: "<div>" +
+            "<div class='clearfix'>" +
+            "<div class='title' data-notify-html='title' />" +
+            "<div class='text' data-notify-text='text' />" +
+            "</div>" +
+            "</div>",
+            classes: {
+                base: {
+                    "white-space": "nowrap",
+                    "background-color": "red",
+                    "padding": "5px"
+                }
+            }
+
+        });
+
+        $.notify.defaults({position: "bottom right"});
+    </script>
+
+    <style type="text/css">
+        th, td {
+            padding: 0px 2px;
+        }
+
+        body {
+            width: 800px;
+            height: 480px;
+            background-color: black;
+            color: #F3EFE0;
+        }
+
+        .navbar-width {
+
+            display: inline-block;
+            font-size: 0.9em;
+            margin-left: 10px;
+            text-align: center;
+        }
+
+        .font-small {
+            font-size: 0.7em;
+        }
+
+        .lightOn {
+            color: #cccc00;
+        }
+
+        /*-------------- clock -----------------*/
+
+        .clock {
+            margin: 0 auto;
+            color: #00c6ff;
+        }
+
+        #Date {
+            font-family: 'BebasNeueRegular', Arial, Helvetica, sans-serif;
+            font-size: 2em;
+            text-align: center;
+
+        }
+
+        .clock hr {
+            background-color: #00c6ff;
+            margin: -5px 0px 5px 0px;
+        }
+
+        .clock ul {
+
+            margin: 0 auto;
+            padding: 0px;
+            list-style: none;
+            text-align: center;
+
+        }
+
+        .clock ul li {
+            display: inline;
+            font-size: 10em;
+            text-align: center;
+            font-family: 'BebasNeueRegular', Arial, Helvetica, sans-serif;
+            line-height: 1em;
+
+        }
+
+        #point {
+            position: relative;
+            -moz-animation: mymove 1s ease infinite;
+            -webkit-animation: mymove 1s ease infinite;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        /* Simple Animation */
+        @-webkit-keyframes mymove {
+            0% {
+                opacity: 1.0;
+                text-shadow: 0 0 20px #00c6ff;
+            }
+
+            50% {
+                opacity: 0;
+                text-shadow: none;
+            }
+
+            100% {
+                opacity: 1.0;
+                text-shadow: 0 0 20px #00c6ff;
+            }
+        }
+
+        @-moz-keyframes mymove {
+            0% {
+                opacity: 1.0;
+                text-shadow: 0 0 20px #00c6ff;
+            }
+
+            50% {
+                opacity: 0;
+                text-shadow: none;
+            }
+
+            100% {
+                opacity: 1.0;
+                text-shadow: 0 0 20px #00c6ff;
+            }
+
+        }
+
+        /*---------------------------------------------*/
+
+        .tempItem {
+            text-transform: uppercase;
+            vertical-align: top;
+            display: inline-block;
+            padding: 5px;
+            width: 50%;
+            overflow: hidden;
+        }
+
+        .tempItem .tem_div{
+            margin: 0 auto;
+            text-align: center;
+            display: block;
+            position: relative;
+            overflow: hidden;
+
+        }
+
+        .description {
+            font-size: 1.5em;
+            margin: -10px auto 0px auto;
+            text-align: center
+        }
+
+
+        .tempItem .temp {
+            line-height: 1em;
+            font-size: 7em;
+        }
+
+        .tempItem .unit{
+            font-size:3em;
+            margin: 0px;
+            padding: 0px;
+        }
+        .tempItem .icon{
+            font-size:5em;
+            vertical-align: top;
+            margin: 0.25em 20px 0px 0px;
+            display: inline-block;
+
+        }
+
+    </style>
+</head>
+<body ng-app="myModule">
+
+
+<div class="container">
+
+
+    <div class="clock" style="overflow: hidden; position: relative">
+        <!--<div id="Date" style="float: left; width: 200px"></div>-->
+        <ul>
+            <li id="hours"></li>
+            <li id="point">:</li>
+            <li id="min"></li>
+            <li id="point">:</li>
+            <li id="sec"></li>
+        </ul>
+        <hr>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // Create two variable with the names of the months and days in an array
+                var monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
+                var dayNames = ["niedziela", "poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota"]
+
+                // Create a newDate() object
+                var newDate = new Date();
+                // Extract the current date from Date object
+                newDate.setDate(newDate.getDate());
+                // Output the day, date, month and year
+                $('#Date').html(dayNames[newDate.getDay()] + "<br>" + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + '<br>' + newDate.getFullYear());
+
+                setInterval(function () {
+                    // Create a newDate() object and extract the seconds of the current time on the visitor's
+                    var seconds = new Date().getSeconds();
+                    // Add a leading zero to seconds value
+                    $("#sec").html(( seconds < 10 ? "0" : "" ) + seconds);
+                }, 1000);
+
+                setInterval(function () {
+                    // Create a newDate() object and extract the minutes of the current time on the visitor's
+                    var minutes = new Date().getMinutes();
+                    // Add a leading zero to the minutes value
+                    $("#min").html(( minutes < 10 ? "0" : "" ) + minutes);
+                }, 1000);
+
+                setInterval(function () {
+                    // Create a newDate() object and extract the hours of the current time on the visitor's
+                    var hours = new Date().getHours();
+                    // Add a leading zero to the hours value
+                    $("#hours").html(( hours < 10 ? "0" : "" ) + hours);
+                }, 1000);
+            });
+        </script>
+    </div>
+
+
+    <div ng-controller="actualTempController">
+        <%- include lifeView/actualTemp.ejs %>
+    </div>
+
+</div>
+
+
+</body>
+</html>
+

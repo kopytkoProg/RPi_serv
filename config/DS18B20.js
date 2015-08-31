@@ -20,14 +20,16 @@ var DS18B20D = {
             //===========================================================================
             innerId: 'michalsRoomCeilingCurtain',
             name: 'Pod sufitem',
-            description: 'Czujnik temperatury umieszczony pod sufitem'
+            description: 'Czujnik temperatury umieszczony pod sufitem',
+            icon: 'fa fa-home'
         },
         {
             id: '28-0000058f8de4',
             //===========================================================================
             innerId: 'firstFlorOutside1',
             name: 'Na dworze',
-            description: 'Czujnik temperatury umieszczony na dworze (1 pietro, Południowa strona)'
+            description: 'Czujnik temperatury umieszczony na dworze (1 pietro, Południowa strona)',
+            icon: 'fa fa-cloud'
         },
         {
             id: 'unassigned_1',
@@ -43,7 +45,8 @@ var DS18B20D = {
             //===========================================================================
             innerId: 'boilerRoomHeatingInstallation-out',
             name: 'Woda z pieca',
-            description: 'Czujnik temperatury umieszczony na róże wyjsciowej z pieca'
+            description: 'Czujnik temperatury umieszczony na róże wyjsciowej z pieca',
+            icon: 'fa fa-fire'
         },
         {
             id: 'unassigned_2',
@@ -57,7 +60,8 @@ var DS18B20D = {
             //===========================================================================
             innerId: 'boilerRoom-waterInBoiler',
             name: 'Woda w bojlerze',
-            description: 'Czujnik temperatury przy bojlerze'
+            description: 'Czujnik temperatury przy bojlerze',
+            icon: 'fa fa-database'
         }
     ],
 
@@ -99,5 +103,6 @@ module.exports = DS18B20D;
  * @property {string} innerId
  * @property {string} name
  * @property {string} description
+ * @property {string} icon
  */
 

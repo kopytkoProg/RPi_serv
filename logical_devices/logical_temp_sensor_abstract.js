@@ -79,7 +79,8 @@ LogicalTempSensorAbstract.prototype.getDescription = function () {
         date: new Date(),
         name: descObj.name,
         crcCorrect: true,
-        description: descObj.description
+        description: descObj.description,
+        icon: descObj.icon
     };
 
 

@@ -133,6 +133,7 @@ app.use('/api/sensors/moveSensors', isAuthenticated.sendUnauthorizedIfUnauthenti
 
 
 app.use('/t/', isAuthenticated.redirectIfNotAuthenticated, express.static(path.join(__dirname, 'private')));
+app.use('/view', isAuthenticated.redirectIfNotAuthenticated, require('./routes/lifeView'));
 app.use('/', isAuthenticated.redirectIfNotAuthenticated, require('./routes/index'));
 
 
