@@ -15,6 +15,9 @@ myModule.config(function ($routeProvider)
         when('/temp-history.html', {
             templateUrl: 'temp-history.html',
             controller: 'tempPlotController'
+        }). when('/new-temp-history.html', {
+            templateUrl: 'new-temp-history.html',
+            controller: 'newTempPlotController'
         }).
         when('/temp-compare-history.html', {
             templateUrl: 'temp-compare-history.html',
@@ -91,6 +94,11 @@ myModule.factory('AppConfig', function ()
                     else if (width < 800) return [2, 'hour'];
                     else return [1, 'hour'];
                 },
+                getTempTickSize: function (difference) {
+                    if (difference <= 30) return 1;
+                    if (30 < difference && difference <= 60) return 2;
+                    if (60 < difference) return 5;
+                },
                 setHeightByWidth: function (plotElement)
                 {
                     var width = $(plotElement).width();
@@ -146,8 +154,9 @@ myModule.factory('AppConfig', function ()
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 var msLeftToNextDay = tomorrow.getTime() - now.getTime();
 
-                return msLeftToNextDay;
+                return msLeftToNextDay + 1000 * 10;
             },
+            getTempTickSize: _this.global.plot.getTempTickSize,
             getHourTickSize: _this.global.plot.getHourTickSize /*function (plotElement)
              {
              var width = $(plotElement).width();

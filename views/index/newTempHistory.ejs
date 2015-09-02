@@ -1,0 +1,33 @@
+
+<script type="text/ng-template" id="new-temp-history.html">
+
+
+
+    <ul class="nav nav-tabs" role="tablist" style="margin: 5px 0 5px 0">
+        <li  ng-repeat="group in groups" ng-click="change_group_to(group)"  ng-class="{active: group == selected_group}" >
+            <a href="" class="my-tab-header" aria-controls="{{group.id}}"  >
+                {{group.name}}
+            </a>
+        </li>
+        <li style="float: right">
+            <div style=" position: relative; overflow: hidden" ng-controller="dropDownListOfHistoryController">
+                    <select class="form-control"
+                            ng-model="selected_history" ng-options="h.name for h in list_of_history"
+                            ng-change="called_on_change_date(selected_history)">
+                    </select>
+            </div>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane plots-container active">
+            <!--<h4>{{group}}</h4>-->
+            <div style="width: 100%; height: 400px;" id="plot"></div>
+        </div>
+    </div>
+
+
+</script>
+
+

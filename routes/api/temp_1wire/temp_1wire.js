@@ -13,14 +13,6 @@ var tempHistory = require('./../../../my_modules/temp_history/tempHistory');
 
 router.get('/list', function (req, res) // list of connected sensors
 {
-    //res.writeHead(200, {'Content-Type': 'text/json'});
-    //var obj = {};
-    //list(function (l)
-    //{
-    //    obj.list = l;
-    //    res.end(JSON.stringify(obj), 'utf8');
-    //})
-    // ============================================
     res.writeHead(200, {'Content-Type': 'text/json'});
     /**  @type {{list:DS18B20DDescriptionObject[]}} */
     var obj = {list: []};
@@ -33,14 +25,7 @@ router.get('/list', function (req, res) // list of connected sensors
 });
 
 router.get('/temp', function (req, res) {
-    //res.writeHead(200, {'Content-Type': 'text/json'});
-    //var obj = {};
-    //temp(function (t)
-    //{
-    //    obj.temp = t;
-    //    res.end(JSON.stringify(obj), 'utf8');
-    //})
-    // ============================================
+
     res.writeHead(200, {'Content-Type': 'text/json'});
     /**  @type {{temp: LogicalTempSensorAbstract~tempAndDescription[]}} */
     var obj = {temp: []};
@@ -86,6 +71,14 @@ router.get('/sensors/descriptions', function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/json'});
     /**  @type {DS18B20DDescriptionObject[]} */
     var obj = DS18B20.Descriptions;
+
+    res.end(JSON.stringify(obj), 'utf8');
+});
+
+router.get('/sensors/groups', function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/json'});
+    /**  @type {*[]} */
+    var obj = DS18B20.Groups;
 
     res.end(JSON.stringify(obj), 'utf8');
 });
